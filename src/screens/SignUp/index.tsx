@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { VStack, Heading, Center } from 'native-base';
-import Input from '../../components/Input';
-import { Feather } from '@expo/vector-icons';
-import Button from '../../components/Button';
-import { theme } from '../../theme/theme';
-import { MaterialIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  Ionicons,
+  Feather,
+  FontAwesome5,
+  MaterialIcons,
+} from '@expo/vector-icons';
 
 import LogoBlack from '../../../assets/logo_black.svg';
+
+import { theme } from '../../theme/theme';
+
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+
+
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
@@ -24,9 +30,10 @@ export default function SignUp() {
         </Center>
 
         <Heading
-            color="gray.800"
-            textAlign="center"
-            marginBottom={8}
+          color="primary.400"
+          textAlign="center"
+          marginBottom={8}
+          fontSize="lg"
         >
             Cadastrar
         </Heading>
