@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { VStack, Heading, Center, Stack } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { theme } from '../../theme/theme';
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import Text from '../../components/Text';
+import Input from '@components/Input';
+import Button from '@components/Button';
+import Text from '@components/Text';
 
 import LogoAzul from '@assets/logo_azul.svg';
-import { useNavigation } from '@react-navigation/native';
 
 
 export default function Login() {
@@ -24,11 +24,9 @@ export default function Login() {
       paddingX={8}
       flex={1}
     >
-      <Stack>
-        <Center>
-          <LogoAzul height={200} width={200} />
-        </Center>
-      
+      <Center>
+        <LogoAzul height={200} width={200} />
+      </Center>
 
       <Heading
         color="primary.400"
@@ -79,7 +77,7 @@ export default function Login() {
         color="gray.400"
         marginBottom={8}
         textAlign="right"
-        onPress={() => navigate("forgotpassword")}
+        onPress={() => navigate("forgotPassword")}
       >
         Esqueceu a senha?
       </Text>
@@ -87,6 +85,7 @@ export default function Login() {
       <Button
         marginBottom={2}
         endIcon={<Feather name="log-in" size={16} color="white"/>}
+        onPress={() => navigate("registerProduct")}
       >
         Login
       </Button>
@@ -94,7 +93,7 @@ export default function Login() {
       <Text color="gray.400">
         Ainda não possui cadastro? <Text color="primary.400" fontSize="sm" onPress={() => navigate("signup")}>Cadastre-se</Text>
       </Text>
-      </Stack>
+      
     </VStack>
   );
 }

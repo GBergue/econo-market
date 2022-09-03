@@ -17,37 +17,37 @@ import Button from '../../components/Button';
 
 
 export default function SignUp() {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <VStack
-        bg="gray.200"
-        padding={50}
-        flex={1}
+      bg="gray.200"
+      padding={50}
+      flex={1}
     >
-        <Center>
-          <LogoBlack height={200} width={200} />
-        </Center>
+      <Center>
+        <LogoBlack height={200} width={200} />
+      </Center>
 
-        <Heading
-          color="primary.400"
-          textAlign="center"
-          marginBottom={8}
-          fontSize="lg"
-        >
-            Cadastrar
-        </Heading>
+      <Heading
+        color="gray.700"
+        textAlign="center"
+        marginBottom={8}
+        fontSize="lg"
+      >
+        Cadastrar
+      </Heading>
 
-        <Input 
+      <Input 
         placeholder='Nome'
         marginBottom={8}
         InputLeftElement={
-            <Ionicons
-                name="person"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-            />
+          <Ionicons
+            name="person"
+            size={20}
+            color={theme.colors.gray[700]}
+            style={{ paddingStart: 8 }}
+          />
         }
       />
 
@@ -55,36 +55,36 @@ export default function SignUp() {
         placeholder='Email'
         marginBottom={8}
         InputLeftElement={
-            <MaterialIcons
-                name="email"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-            />
+          <MaterialIcons
+            name="email"
+            size={20}
+            color={theme.colors.gray[700]}
+            style={{ paddingStart: 8 }}
+          />
         }
       />
 
       <Input 
         placeholder='Senha'
         secureTextEntry={!showPassword}
+        marginBottom={8}
         InputLeftElement={
-            <FontAwesome5
-                name="key"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-            />
+          <FontAwesome5
+            name="key"
+            size={20}
+            color={theme.colors.gray[700]}
+            style={{ paddingStart: 8 }}
+          />
         }
         InputRightElement={
-            <Feather
-                name={showPassword ? "eye" : "eye-off"}
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingEnd: 8 }}
-                onPress={() => setShowPassword((x) => !x)}
-            />
+          <Feather
+            name={showPassword ? "eye" : "eye-off"}
+            size={20}
+            color={theme.colors.gray[700]}
+            style={{ paddingEnd: 8 }}
+            onPress={() => setShowPassword((x) => !x)}
+          />
         }
-        marginBottom={8}
       />
 
       <Button>
