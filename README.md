@@ -1,4 +1,4 @@
-# econo-market
+# Econo Market
 
 Projeto desenvolvido em react-native, utilizando expo
 
