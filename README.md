@@ -5,7 +5,7 @@ Projeto desenvolvido em react-native, utilizando expo
 # Libs
 > Utilizar o yarn para adicionar 
 
-#Build DEV
+# Build DEV
   > expo start
 
 # Build PROD
