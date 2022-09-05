@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VStack, Heading, Center } from 'native-base';
+import { VStack, Center } from 'native-base';
 import {
   Ionicons,
   Feather,
@@ -13,6 +13,7 @@ import { theme } from '../../theme/theme';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import Heading from "../../components/Heading";
 
 
 
@@ -30,10 +31,8 @@ export default function SignUp() {
       </Center>
 
       <Heading
-        color="gray.700"
         textAlign="center"
         marginBottom={8}
-        fontSize="lg"
       >
         Cadastrar
       </Heading>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VStack, Heading, Center, Stack } from 'native-base';
+import { VStack, Center } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,9 +7,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import { theme } from '../../theme/theme';
 
-import Input from '@components/Input';
-import Button from '@components/Button';
-import Text from '@components/Text';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import Text from '../../components/Text';
+import Heading from "../../components/Heading";
 
 import LogoAzul from '@assets/logo_azul.svg';
 
@@ -29,10 +30,8 @@ export default function Login() {
       </Center>
 
       <Heading
-        color="primary.400"
         textAlign="center"
         marginBottom={8}
-        fontSize="lg"
       >
         Oi, Vamos começar?
       </Heading>

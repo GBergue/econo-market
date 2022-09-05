@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VStack, Heading, Center, ScrollView } from 'native-base';
+import { VStack, ScrollView } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
+import Heading from "../../components/Heading";
 
 import LogoAzul from '@assets/logo_azul.svg';
 
@@ -20,39 +21,37 @@ export default function RegisterProduct() {
       flex={1}
     >
 
-      <Header/>
+      <Header title="Cadastro"/>
       <ScrollView paddingX={8}>      
         <Heading
           marginY={8}
-          fontSize="lg"
-          color="gray.600"
         >
           Informe os dados do produto
         </Heading>
 
         <Input 
           placeholder='Produto'
-          marginBottom={8}
+          marginBottom={4}
         />
 
         <Input 
           placeholder='Marca'
-          marginBottom={8}
+          marginBottom={4}
         />
 
         <Input 
           placeholder='Categoria'
-          marginBottom={8}
+          marginBottom={4}
         />
 
         <Input 
           placeholder='Unidade'
-          marginBottom={8}
+          marginBottom={4}
         />
 
         <Input 
           placeholder='Mercado'
-          marginBottom={8}
+          marginBottom={4}
         />
 
         <Input 

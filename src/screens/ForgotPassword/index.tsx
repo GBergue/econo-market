@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { VStack, Heading, Center } from 'native-base';
+import { VStack, Center } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { theme } from '../../theme/theme';
 
+import Heading from "../../components/Heading";
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Text from '../../components/Text';
@@ -26,9 +27,7 @@ export default function ForgotPassword() {
       </Center>
 
       <Heading
-        color="primary.400"
         marginBottom={2}
-        fontSize="lg"
       >
         Esqueceu a senha?
       </Heading>

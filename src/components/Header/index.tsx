@@ -5,7 +5,7 @@ import LogoWhite from '@assets/logo_white.svg';
 import Text from '../Text';
 import { Feather } from '@expo/vector-icons';
 
-export default function Header() {
+export default function Header ({title}) {
   return (
     <VStack
       bg="primary.500"
@@ -22,7 +22,8 @@ export default function Header() {
           width={75}
         />
 
-        <Text>Title</Text>
+    
+        <Text>{title}</Text>
 
         <Icon
           as={Feather}
