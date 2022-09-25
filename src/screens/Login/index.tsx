@@ -34,21 +34,37 @@ export default function Login() {
     }
   });
 
-  function getErrorMsg(error: FieldErrorsImpl, field: string) {
-    let msg = '';
 
-    //if (error.)
+  function getErrorMsg(field: string) {
+    const fieldError = errors[field];
+
+    if (fieldError) {
+      const { message } = fieldError;
+      if (message) {
+        return (
+          <Text
+            color="gray.400"
+            marginBottom={6}
+          >
+            {message}
+          </Text>
+        );
+      }
+    } 
+
+    return null;
   }
+
+
 
   function onSubmit({ email, password }) {
     setIsLoading(true);
-    console.log( email, password);
+
     api.post('/auth/login', {
       email,
       password,
     })
       .then(({ data }) => {
-        console.log(data);
         const { access_token } = data;
         if (access_token) {
           setToken(access_token);
@@ -61,8 +77,6 @@ export default function Login() {
       .finally(() =>  setIsLoading(false));
   }
 
-  //console.log(errors);
-  //console.log(control);
 
   return (
     <VStack
@@ -88,18 +102,24 @@ export default function Login() {
         control={control}
         name="email"
         rules={{
-          maxLength: 50,
-          minLength: 3,
-          required: true,
+          maxLength: {
+            value: 100,
+            message: 'Tamanho máximo de 100 caracteres'
+          },
+          minLength: {
+            value: 3,
+            message: 'Tamanho mínimo de 3 caracteres'
+          },
+          required: 'Email é obrigátorio',
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input 
             placeholder='Email'
-            marginBottom={8}
+            marginBottom={!!errors.email ? 2 : 8}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            isInvalid={!errors.email?.message}
+            isInvalid={!!errors.email}
             InputLeftElement={
               <MaterialIcons
                 name="email"
@@ -112,14 +132,21 @@ export default function Login() {
         )}
       />
 
-      {!!errors.email?.message && (<Text>{errors.email?.message}</Text>)}
+      {getErrorMsg('email')}
       
       <Controller
         control={control}
         name="password"
         rules={{
-          maxLength: 50,
-          required: true,
+          maxLength: {
+            value: 50,
+            message: 'Tamanho máximo de 50 caracteres'
+          },
+          minLength: {
+            value: 6,
+            message: 'Tamanho mínimo de 6 caracteres'
+          },
+          required: 'Senha é obrigátoria',
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input 
@@ -129,7 +156,7 @@ export default function Login() {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            isInvalid={errors.password}
+            isInvalid={!!errors.password}
             InputLeftElement={
               <FontAwesome5
                 name="key"
@@ -150,6 +177,8 @@ export default function Login() {
           />
         )}
       />
+
+      {getErrorMsg('password')}
 
       <Text
         color="gray.400"

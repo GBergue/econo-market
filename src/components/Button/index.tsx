@@ -5,9 +5,9 @@ import { Button as NBButton, IButtonProps } from 'native-base';
 export default function Button(props: IButtonProps) {
   return (
     <NBButton
-      colorScheme="primary"
+      colorScheme={props.colorScheme || 'primary'}
       fontFamily="body"
-      bg="primary.400"
+      bg={props.bg || 'primary.400'}
       rounded="sm"
       {...props}
     />

@@ -8,8 +8,9 @@ import {
   FontAwesome5,
   MaterialIcons,
 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-import LogoBlack from '../../../assets/logo_black.svg';
+import LogoAzul from '@assets/logo_azul.svg';
 
 import { theme } from '../../theme/theme';
 
@@ -17,9 +18,10 @@ import Input from '../../components/Input';
 import Loading from '../../components/Loading';
 import Button from '../../components/Button';
 import Heading from "../../components/Heading";
+import Text from "../../components/Text";
 
 import api from '../../api';
-import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 
 
@@ -35,15 +37,39 @@ export default function SignUp() {
     }
   });
 
+  function getErrorMsg(field: string) {
+    const fieldError = errors[field];
+
+    if (fieldError) {
+      const { message } = fieldError;
+      if (message) {
+        return (
+          <Text
+            color="gray.400"
+            marginBottom={6}
+          >
+            {message}
+          </Text>
+        );
+      }
+    }
+    return null;
+  }
+
   function onSubmit({ name, email, password }) {
     setIsLoading(true);
     console.log(name, email, password);
-    
-    api.post('/user', {
+
+    // api.post('/user', {
+    //   name: 'teste',
+    //   email: 'email',
+    //   password: '123123'
+    // })
+    axios.post('https://api-economarket.herokuapp.com/user', {
       name: 'teste',
       email: 'email',
       password: '123123'
-    })
+    })    
       .then(res => console.log(res))
       .catch(err => {
         console.error(err);
@@ -63,7 +89,7 @@ export default function SignUp() {
       {isLoading && <Loading/>}
 
       <Center>
-        <LogoBlack height={200} width={200} />
+        <LogoAzul height={200} width={200} />
       </Center>
 
       <Heading
@@ -77,17 +103,24 @@ export default function SignUp() {
         control={control}
         name="name"
         rules={{
-          maxLength: 50,
-          minLength: 3,
-          required: true,
+          maxLength: {
+            value: 50,
+            message: 'Tamanho máximo de 50 caracteres'
+          },
+          minLength: {
+            value: 3,
+            message: 'Tamanho mínimo de 3 caracteres'
+          },
+          required: 'Nome é obrigátorio',
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input 
             placeholder='Nome'
-            marginBottom={8}
+            marginBottom={!!errors.name ? 2 : 8}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            isInvalid={!!errors.name}
             InputLeftElement={
               <Ionicons
                 name="person"
@@ -100,21 +133,30 @@ export default function SignUp() {
         )}
       />
 
+      {getErrorMsg('name')}
+
       <Controller
         control={control}
         name="email"
         rules={{
-          maxLength: 100,
-          minLength: 3,
-          required: true,
+          maxLength: {
+            value: 100,
+            message: 'Tamanho máximo de 100 caracteres'
+          },
+          minLength: {
+            value: 3,
+            message: 'Tamanho mínimo de 3 caracteres'
+          },
+          required: 'Email é obrigátorio',
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input 
             placeholder='Email'
-            marginBottom={8}
+            marginBottom={!!errors.email ? 2 : 8}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            isInvalid={!!errors.email}
             InputLeftElement={
               <MaterialIcons
                 name="email"
@@ -127,22 +169,31 @@ export default function SignUp() {
         )}
       />
 
+      {getErrorMsg('email')}
+
       <Controller
         control={control}
         name="password"
         rules={{
-          maxLength: 100,
-          minLength: 3,
-          required: true,
+          maxLength: {
+            value: 50,
+            message: 'Tamanho máximo de 50 caracteres'
+          },
+          minLength: {
+            value: 3,
+            message: 'Tamanho mínimo de 3 caracteres'
+          },
+          required: 'Senha é obrigátoria',
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input 
             placeholder='Senha'
             secureTextEntry={!showPassword}
-            marginBottom={8}
+            marginBottom={!!errors.password ? 2 : 8}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            isInvalid={!!errors.password}
             InputLeftElement={
               <FontAwesome5
                 name="key"
@@ -164,17 +215,21 @@ export default function SignUp() {
         )}
       />
 
+      {getErrorMsg('password')}
+
       <Button
         onPress={handleSubmit(onSubmit)}
         isLoading={isLoading}
+        marginBottom={4}
       >
         Cadastrar
       </Button>
 
       <Button
         onPress={() => navigation.navigate('login')}
+        bg="gray.400"
       >
-        Login
+        Voltar
       </Button>
     </VStack>
   );
