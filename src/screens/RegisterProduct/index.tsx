@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
-import { VStack, ScrollView } from 'native-base';
+
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { theme } from '../../theme/theme';
+import React, { useState, useContext } from 'react';
+import { VStack, ScrollView } from 'native-base';
+import { useForm, Controller  } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import Text from '../../components/Text';
 import Header from '../../components/Header';
 import Heading from "../../components/Heading";
 
-import LogoAzul from '@assets/logo_azul.svg';
+import AuthContext from '../../context/AuthContext';
 
 export default function RegisterProduct() {
+  const { navigate } = useNavigation();
+  const { setAuthenticated } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    }
+  });
+
   return (
     <VStack
       bg="gray.100"

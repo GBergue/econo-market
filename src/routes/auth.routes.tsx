@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import RegisterProduct from "../screens/RegisterProduct";
 import ForgotPassword from "../screens/ForgotPassword";
 import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
