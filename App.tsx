@@ -11,6 +11,7 @@ import Routes from './src/routes';
 import { theme } from './src/theme/theme';
 
 import Loading from './src/components/Loading';
+import { AuthContextProvider } from './src/context/AuthContext';
 
 
 export default function App() {
@@ -21,7 +22,9 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={theme}>
-      {fontsLoaded ? <Routes /> : <Loading />}
+      <AuthContextProvider>
+        {fontsLoaded ? <Routes /> : <Loading />}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
