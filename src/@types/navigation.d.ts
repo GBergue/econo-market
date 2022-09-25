@@ -5,6 +5,8 @@ export declare global {
       signup: undefined;
       forgotPassword: undefined;
       registerProduct: undefined;
+      productList: undefined;
+      main: undefined;
     }
   }
 }

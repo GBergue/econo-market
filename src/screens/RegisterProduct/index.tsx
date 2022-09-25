@@ -15,11 +15,10 @@ import Header from '../../components/Header';
 import Heading from "../../components/Heading";
 
 import AuthContext from '../../context/AuthContext';
+import api from '../../api';
 
 export default function RegisterProduct() {
   const { navigate } = useNavigation();
-  const { setAuthenticated } = useContext(AuthContext);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -28,6 +27,15 @@ export default function RegisterProduct() {
     }
   });
 
+  function OnSubmit() {
+    // api.post('register/product', {
+    //   name,
+    //   price,
+    //   unity,
+    //   brand,
+    //   categorty,
+    // });
+  }
   return (
     <VStack
       bg="gray.100"
