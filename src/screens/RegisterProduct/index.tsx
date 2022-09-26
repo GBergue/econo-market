@@ -223,14 +223,6 @@ export default function RegisterProduct() {
           control={control}
           name="price"
           rules={{
-            maxLength: {
-              value: 100,
-              message: 'Tamanho máximo de 100 caracteres'
-            },
-            minLength: {
-              value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
-            },
             required: 'Preço é obrigatório',
           }}
           render={({ field: { onChange, onBlur, value } }) => (
