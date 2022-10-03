@@ -36,6 +36,13 @@ export default function RegisterProduct() {
     },
   });
 
+  function validate (value: string) {
+    const matches = value.match(
+      /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/
+    );
+    return matches?.length > 0 || "Apenas números";
+  }
+
   function getErrorMsg(field: string) {
     const fieldError = errors[field];
 
@@ -224,6 +231,7 @@ export default function RegisterProduct() {
           name="price"
           rules={{
             required: 'Preço é obrigatório',
+            validate,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
@@ -232,6 +240,7 @@ export default function RegisterProduct() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              keyboardType="number-pad"
               isInvalid={!!errors.price}
             />
           )}
