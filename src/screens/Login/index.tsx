@@ -30,7 +30,7 @@ export default function Login() {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       email: __DEV__ ? 'manager@manager.com' : '',
-      password: __DEV__ ? 'manager' : '',
+      password: __DEV__ ? '@manager' : '',
     }
   });
 

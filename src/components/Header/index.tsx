@@ -4,12 +4,13 @@ import { HStack, Icon, VStack } from 'native-base';
 import LogoWhite from '@assets/logo_white.svg';
 import Text from '../Text';
 import { Feather } from '@expo/vector-icons';
+import Heading from '../Heading';
 
 export default function Header ({title}) {
   return (
     <VStack
       bg="primary.500"
-      padding={4}
+      padding={2}
       pt={8}
     >
       <HStack
@@ -23,7 +24,7 @@ export default function Header ({title}) {
         />
 
     
-        <Text>{title}</Text>
+        {/* <Heading color="white">{title}</Heading> */}
 
         <Icon
           as={Feather}

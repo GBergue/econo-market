@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Alert } from 'react-native';
-
+import { Select as NBSelect } from "native-base";
 import { theme } from "../../theme/theme";
 import React, { useState, useContext } from "react";
 import { VStack, ScrollView } from "native-base";
@@ -14,9 +14,27 @@ import Button from "../../components/Button";
 import Text from '../../components/Text';
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
+import Select from "../../components/Select";
 
 import AuthContext from "../../context/AuthContext";
 import api from "../../api";
+
+const categorias = [
+  { categoria: 'Bebidas' },
+  { categoria: 'Carnes' },
+  { categoria: 'Congelados' },
+  { categoria: 'Frios/Lacticínios' },
+  { categoria: 'Mercearia' },
+  { categoria: 'Cereais' },
+  { categoria: 'Doces' },
+  { categoria: 'Hortifruti' },
+  { categoria: 'Higiene e Beleza' },
+  { categoria: 'Limpeza' },
+  { categoria: 'Pet-Shop' },
+  { categoria: 'Jardinagem' },
+  { categoria: 'Bazar' },
+  { categoria: 'Outros' },
+]
 
 export default function RegisterProduct() {
   const { navigate } = useNavigation();
@@ -157,16 +175,34 @@ export default function RegisterProduct() {
             required: 'Categoria é obrigatório',
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <Select
+              accessibilityLabel="Categoria"
+              placeholder="Categoria"
+              onValueChange={onChange}
+              selectedValue={value}
+              _selectedItem={{
+                bg: "primary.400",
+              }}
+              mb={!!errors.categorty ? 2 : 4}
+            >
+              { categorias.map(({ categoria }) => (
+                  <NBSelect.Item label={categoria} value={categoria} ></NBSelect.Item>
+                ))
+              }
+            </Select>
+          )}
+        />
+{/* 
+<Input
               placeholder="Categoria"
               marginBottom={!!errors.categorty ? 2 : 4}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
               isInvalid={!!errors.categorty}
-            />
-          )}
-        />
+            /> */}
+
+      
 
         {getErrorMsg('categorty')}
         

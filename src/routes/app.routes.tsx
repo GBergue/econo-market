@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import RegisterProduct from "../screens/RegisterProduct";
 import Main from "../screens/Main";
 import ProductList from "../screens/ProductList";
+import CategoryList from "../screens/CategoryList";
 
 import { theme } from "../theme/theme";
 
@@ -13,7 +14,7 @@ const Tab = createBottomTabNavigator();
 function getTabIcon( route, focused, color, size ) {
   let iconName;
 
-  if (route.name === 'main') {
+  if (route.name === 'categoryList') {
     iconName = focused ? 'ios-home' : 'ios-home-outline';
   }
   else if (route.name === 'productList') {
@@ -26,8 +27,8 @@ function getTabIcon( route, focused, color, size ) {
   return <Ionicons name={iconName} size={size} color={color} />;
 }
 
-function getTabBarLabel(route, string>) {
-  if (route.name === 'main') return "Home";
+function getTabBarLabel(route) {
+  if (route.name === 'categoryList') return "Home";
   if (route.name === 'productList') return "Produto";  
   if (route.name === 'registerProduct') return "Adicionar";
 }
@@ -46,7 +47,7 @@ export function AppRoutes() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="main" component={Main} />
+      <Tab.Screen name="categoryList" component={CategoryList} />
       <Tab.Screen name="registerProduct" component={RegisterProduct} />
       <Tab.Screen name="productList" component={ProductList} />
     </Tab.Navigator>

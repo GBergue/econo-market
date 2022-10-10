@@ -7,6 +7,7 @@ export declare global {
       registerProduct: undefined;
       productList: undefined;
       main: undefined;
+      categoryList: undefined;
     }
   }
 }
