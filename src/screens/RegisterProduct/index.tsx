@@ -1,10 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
 import { Alert } from 'react-native';
 import { Select as NBSelect } from "native-base";
-import { theme } from "../../theme/theme";
-import React, { useState, useContext } from "react";
+import { Feather } from "@expo/vector-icons";
 import { VStack, ScrollView } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
@@ -16,7 +13,6 @@ import Header from "../../components/Header";
 import Heading from "../../components/Heading";
 import Select from "../../components/Select";
 
-import AuthContext from "../../context/AuthContext";
 import api from "../../api";
 
 const categorias = [
@@ -35,9 +31,12 @@ const categorias = [
   { categoria: 'Bazar' },
   { categoria: 'Outros' },
 ]
+import { CategoryDTO } from "src/model/category";
+
 
 export default function RegisterProduct() {
   const { navigate } = useNavigation();
+  const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const {
     control,
@@ -53,6 +52,14 @@ export default function RegisterProduct() {
       price: "",
     },
   });
+
+  useEffect(() => {
+    api.get<CategoryDTO[]>('/search/category')
+      .then(({ data }) => {
+        console.log(data);
+        setCategories(data);
+      });
+  }, []);
 
   function validate (value: string) {
     const matches = value.match(
@@ -185,8 +192,8 @@ export default function RegisterProduct() {
               }}
               mb={!!errors.categorty ? 2 : 4}
             >
-              { categorias.map(({ categoria }) => (
-                  <NBSelect.Item label={categoria} value={categoria} ></NBSelect.Item>
+              { categories.map(({ name, id }) => (
+                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
                 ))
               }
             </Select>
