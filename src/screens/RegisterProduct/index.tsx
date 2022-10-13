@@ -15,28 +15,16 @@ import Select from "../../components/Select";
 
 import api from "../../api";
 
-const categorias = [
-  { categoria: 'Bebidas' },
-  { categoria: 'Carnes' },
-  { categoria: 'Congelados' },
-  { categoria: 'Frios/Lacticínios' },
-  { categoria: 'Mercearia' },
-  { categoria: 'Cereais' },
-  { categoria: 'Doces' },
-  { categoria: 'Hortifruti' },
-  { categoria: 'Higiene e Beleza' },
-  { categoria: 'Limpeza' },
-  { categoria: 'Pet-Shop' },
-  { categoria: 'Jardinagem' },
-  { categoria: 'Bazar' },
-  { categoria: 'Outros' },
-]
 import { CategoryDTO } from "src/model/category";
+import { MarketDTO } from "src/model/market";
+import { BrandDTO } from "src/model/brand";
 
 
 export default function RegisterProduct() {
   const { navigate } = useNavigation();
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
+  const [markets, setMarkets] = useState<MarketDTO[]>([]);
+  const [brands, setBrands] = useState<MarketDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const {
     control,
@@ -48,7 +36,7 @@ export default function RegisterProduct() {
       brand: "",
       categorty: "",
       unity: "",
-      mercado: "",
+      market: "",
       price: "",
     },
   });
@@ -59,11 +47,22 @@ export default function RegisterProduct() {
         console.log(data);
         setCategories(data);
       });
+    api.get<MarketDTO[]>('/search/market')
+      .then(({ data }) => {
+        console.log(data);
+        setMarkets(data);
+      });
+    api.get<BrandDTO[]>('/search/brand')
+      .then(({ data }) => {
+        console.log(data);
+        setBrands(data);
+      });
   }, []);
+
 
   function validate (value: string) {
     const matches = value.match(
-      /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/
+      "^[0-9,.]+$"
     );
     return matches?.length > 0 || "Apenas números";
   }
@@ -88,7 +87,7 @@ export default function RegisterProduct() {
     return null;
   }
 
-  function OnSubmit({name, price, unity, brand, categorty}) {
+  function OnSubmit({name, price, unity, brand, categorty, market}) {
     setIsLoading(true);
 
     api.post('register/product', {
@@ -97,6 +96,7 @@ export default function RegisterProduct() {
       unity,
       brand,
       categorty,
+      market,
     })
       .catch(err => {
         Alert.alert("Não foi possível cadastrar o produto, tente novamente!");
@@ -154,14 +154,21 @@ export default function RegisterProduct() {
             required: 'Marca é obrigatório',
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <Select
+              accessibilityLabel="Marca"
               placeholder="Marca"
-              marginBottom={!!errors.brand ? 2 : 4}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              isInvalid={!!errors.brand}
-            />
+              onValueChange={onChange}
+              selectedValue={value}
+              _selectedItem={{
+                bg: "primary.400",
+              }}
+              mb={!!errors.market ? 2 : 4}
+            >
+              { brands.map(({ name, id }) => (
+                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
+                ))
+              }
+            </Select>
           )}
         />
 
@@ -243,7 +250,7 @@ export default function RegisterProduct() {
 
         <Controller
           control={control}
-          name="mercado"
+          name="market"
           rules={{
             maxLength: {
               value: 100,
@@ -256,18 +263,25 @@ export default function RegisterProduct() {
             required: 'Mercado é obrigatório',
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <Select
+              accessibilityLabel="Mercado"
               placeholder="Mercado"
-              marginBottom={!!errors.mercado ? 2 : 4}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              isInvalid={!!errors.mercado}
-            />
+              onValueChange={onChange}
+              selectedValue={value}
+              _selectedItem={{
+                bg: "primary.400",
+              }}
+              mb={!!errors.market ? 2 : 4}
+            >
+              { markets.map(({ name, id }) => (
+                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
+                ))
+              }
+            </Select>
           )}
         />
 
-        {getErrorMsg('mercado')}
+        {getErrorMsg('market')}
 
         <Controller
           control={control}
