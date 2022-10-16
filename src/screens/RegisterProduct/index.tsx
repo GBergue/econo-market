@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 import { Select as NBSelect } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { VStack, ScrollView } from "native-base";
@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import Text from '../../components/Text';
+import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
 import Select from "../../components/Select";
@@ -19,12 +19,11 @@ import { CategoryDTO } from "src/model/category";
 import { MarketDTO } from "src/model/market";
 import { BrandDTO } from "src/model/brand";
 
-
 export default function RegisterProduct() {
   const { navigate } = useNavigation();
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [markets, setMarkets] = useState<MarketDTO[]>([]);
-  const [brands, setBrands] = useState<MarketDTO[]>([]);
+  const [brands, setBrands] = useState<BrandDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const {
     control,
@@ -42,28 +41,22 @@ export default function RegisterProduct() {
   });
 
   useEffect(() => {
-    api.get<CategoryDTO[]>('/search/category')
-      .then(({ data }) => {
-        console.log(data);
-        setCategories(data);
-      });
-    api.get<MarketDTO[]>('/search/market')
-      .then(({ data }) => {
-        console.log(data);
-        setMarkets(data);
-      });
-    api.get<BrandDTO[]>('/search/brand')
-      .then(({ data }) => {
-        console.log(data);
-        setBrands(data);
-      });
+    api.get<CategoryDTO[]>("/search/category").then(({ data }) => {
+      console.log(data);
+      setCategories(data);
+    });
+    api.get<MarketDTO[]>("/search/market").then(({ data }) => {
+      console.log(data);
+      setMarkets(data);
+    });
+    api.get<BrandDTO[]>("/search/brand").then(({ data }) => {
+      console.log(data);
+      setBrands(data);
+    });
   }, []);
 
-
-  function validate (value: string) {
-    const matches = value.match(
-      "^[0-9,.]+$"
-    );
+  function validate(value: string) {
+    const matches = value.match("^[0-9,.]+$");
     return matches?.length > 0 || "Apenas números";
   }
 
@@ -74,37 +67,34 @@ export default function RegisterProduct() {
       const { message } = fieldError;
       if (message) {
         return (
-          <Text
-            color="gray.400"
-            marginBottom={6}
-          >
+          <Text color="gray.400" marginBottom={6}>
             {message}
           </Text>
         );
       }
-    } 
+    }
 
     return null;
   }
 
-  function OnSubmit({name, price, unity, brand, categorty, market}) {
+  function OnSubmit({ name, price, unity, brand, categorty, market }) {
     setIsLoading(true);
 
-    api.post('register/product', {
-      name,
-      price,
-      unity,
-      brand,
-      categorty,
-      market,
-    })
-      .catch(err => {
+    api
+      .post("register/product", {
+        name,
+        price,
+        unity,
+        brand,
+        categorty,
+        market,
+      })
+      .catch((err) => {
         Alert.alert("Não foi possível cadastrar o produto, tente novamente!");
       })
       .finally(() => setIsLoading(false));
-
   }
-  
+
   return (
     <VStack bg="gray.100" flex={1}>
       <Header title="Cadastro" />
@@ -117,13 +107,13 @@ export default function RegisterProduct() {
           rules={{
             maxLength: {
               value: 100,
-              message: 'Tamanho máximo de 100 caracteres'
+              message: "Tamanho máximo de 100 caracteres",
             },
             minLength: {
               value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              message: "Tamanho mínimo de 3 caracteres",
             },
-            required: 'Produto é obrigatório',
+            required: "Produto é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
@@ -137,7 +127,7 @@ export default function RegisterProduct() {
           )}
         />
 
-      {getErrorMsg('name')}
+        {getErrorMsg("name")}
 
         <Controller
           control={control}
@@ -145,13 +135,13 @@ export default function RegisterProduct() {
           rules={{
             maxLength: {
               value: 100,
-              message: 'Tamanho máximo de 100 caracteres'
+              message: "Tamanho máximo de 100 caracteres",
             },
             minLength: {
               value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              message: "Tamanho mínimo de 3 caracteres",
             },
-            required: 'Marca é obrigatório',
+            required: "Marca é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Select
@@ -162,17 +152,20 @@ export default function RegisterProduct() {
               _selectedItem={{
                 bg: "primary.400",
               }}
-              mb={!!errors.market ? 2 : 4}
+              mb={!!errors.brand ? 2 : 4}
             >
-              { brands.map(({ name, id }) => (
-                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
-                ))
-              }
+              {brands.map(({ brandName, id }) => (
+                <NBSelect.Item
+                  key={id}
+                  label={brandName}
+                  value={brandName}
+                ></NBSelect.Item>
+              ))}
             </Select>
           )}
         />
 
-        {getErrorMsg('brand')}
+        {getErrorMsg("brand")}
 
         <Controller
           control={control}
@@ -180,13 +173,13 @@ export default function RegisterProduct() {
           rules={{
             maxLength: {
               value: 50,
-              message: 'Tamanho máximo de 50 caracteres'
+              message: "Tamanho máximo de 50 caracteres",
             },
             minLength: {
               value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              message: "Tamanho mínimo de 3 caracteres",
             },
-            required: 'Categoria é obrigatório',
+            required: "Categoria é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Select
@@ -199,14 +192,17 @@ export default function RegisterProduct() {
               }}
               mb={!!errors.categorty ? 2 : 4}
             >
-              { categories.map(({ name, id }) => (
-                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
-                ))
-              }
+              {categories.map(({ name, id }) => (
+                <NBSelect.Item
+                  key={id}
+                  label={name}
+                  value={name}
+                ></NBSelect.Item>
+              ))}
             </Select>
           )}
         />
-{/* 
+        {/* 
 <Input
               placeholder="Categoria"
               marginBottom={!!errors.categorty ? 2 : 4}
@@ -216,23 +212,21 @@ export default function RegisterProduct() {
               isInvalid={!!errors.categorty}
             /> */}
 
-      
+        {getErrorMsg("categorty")}
 
-        {getErrorMsg('categorty')}
-        
         <Controller
           control={control}
           name="unity"
           rules={{
             maxLength: {
               value: 100,
-              message: 'Tamanho máximo de 100 caracteres'
+              message: "Tamanho máximo de 100 caracteres",
             },
             minLength: {
               value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              message: "Tamanho mínimo de 3 caracteres",
             },
-            required: 'Unidade é obrigatório',
+            required: "Unidade é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
@@ -246,7 +240,7 @@ export default function RegisterProduct() {
           )}
         />
 
-        {getErrorMsg('unity')}
+        {getErrorMsg("unity")}
 
         <Controller
           control={control}
@@ -254,13 +248,13 @@ export default function RegisterProduct() {
           rules={{
             maxLength: {
               value: 100,
-              message: 'Tamanho máximo de 100 caracteres'
+              message: "Tamanho máximo de 100 caracteres",
             },
             minLength: {
               value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              message: "Tamanho mínimo de 3 caracteres",
             },
-            required: 'Mercado é obrigatório',
+            required: "Mercado é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Select
@@ -273,21 +267,24 @@ export default function RegisterProduct() {
               }}
               mb={!!errors.market ? 2 : 4}
             >
-              { markets.map(({ name, id }) => (
-                  <NBSelect.Item key={id} label={name} value={name} ></NBSelect.Item>
-                ))
-              }
+              {markets.map(({ name, id }) => (
+                <NBSelect.Item
+                  key={id}
+                  label={name}
+                  value={name}
+                ></NBSelect.Item>
+              ))}
             </Select>
           )}
         />
 
-        {getErrorMsg('market')}
+        {getErrorMsg("market")}
 
         <Controller
           control={control}
           name="price"
           rules={{
-            required: 'Preço é obrigatório',
+            required: "Preço é obrigatório",
             validate,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -303,7 +300,7 @@ export default function RegisterProduct() {
           )}
         />
 
-        {getErrorMsg('price')}
+        {getErrorMsg("price")}
 
         <Button
           marginBottom={2}

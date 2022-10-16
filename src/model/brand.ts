@@ -1,6 +1,7 @@
 export type BrandDTO = {
   id: number,
-  name: string,
+  brandName: string,
   uuid: string,
+  // name: string,
   //??
 }
