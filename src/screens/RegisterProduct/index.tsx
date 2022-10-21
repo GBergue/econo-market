@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Alert } from "react-native";
-import { Select as NBSelect } from "native-base";
+import { Select as NBSelect, useToast } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { VStack, ScrollView } from "native-base";
 import { useForm, Controller } from "react-hook-form";
@@ -20,6 +20,7 @@ import { MarketDTO } from "src/model/market";
 import { BrandDTO } from "src/model/brand";
 
 export default function RegisterProduct() {
+  const toast = useToast();
   const { navigate } = useNavigation();
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [markets, setMarkets] = useState<MarketDTO[]>([]);
@@ -80,15 +81,19 @@ export default function RegisterProduct() {
   function OnSubmit({ name, price, unity, brand, categorty, market }) {
     setIsLoading(true);
 
-    api
-      .post("register/product", {
-        name,
-        price,
-        unity,
-        brand,
-        categorty,
-        market,
-      })
+    api.post("register/product", {
+      name,
+      price,
+      unity,
+      brand,
+      categorty,
+      market,
+    })
+      .then(() => {
+        toast.show({
+          description: 'Produto adiiconado com sucesso!'
+        })
+      })  
       .catch((err) => {
         Alert.alert("Não foi possível cadastrar o produto, tente novamente!");
       })
