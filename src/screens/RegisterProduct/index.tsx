@@ -18,6 +18,7 @@ import api from "../../api";
 import { CategoryDTO } from "src/model/category";
 import { MarketDTO } from "src/model/market";
 import { BrandDTO } from "src/model/brand";
+import { UnityDTO } from "src/model/unity";
 
 export default function RegisterProduct() {
   const toast = useToast();
@@ -25,6 +26,7 @@ export default function RegisterProduct() {
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [markets, setMarkets] = useState<MarketDTO[]>([]);
   const [brands, setBrands] = useState<BrandDTO[]>([]);
+  const [unities, setUnities] = useState<UnityDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const {
     control,
@@ -53,6 +55,10 @@ export default function RegisterProduct() {
     api.get<BrandDTO[]>("/search/brand").then(({ data }) => {
       console.log(data);
       setBrands(data);
+    });
+    api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
+      console.log(data);
+      setUnities(data);
     });
   }, []);
 
@@ -207,15 +213,7 @@ export default function RegisterProduct() {
             </Select>
           )}
         />
-        {/* 
-<Input
-              placeholder="Categoria"
-              marginBottom={!!errors.categorty ? 2 : 4}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              isInvalid={!!errors.categorty}
-            /> */}
+       
 
         {getErrorMsg("categorty")}
 
@@ -234,14 +232,24 @@ export default function RegisterProduct() {
             required: "Unidade é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <Select
+              accessibilityLabel="Unidade"
               placeholder="Unidade"
-              marginBottom={!!errors.unity ? 2 : 4}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              isInvalid={!!errors.unity}
-            />
+              onValueChange={onChange}
+              selectedValue={value}
+              _selectedItem={{
+                bg: "primary.400",
+              }}
+              mb={!!errors.unity ? 2 : 4}
+            >
+              {unities.map(({ abbreviation, description }) => (
+                <NBSelect.Item
+                  key={abbreviation}
+                  label={description}
+                  value={description}
+                ></NBSelect.Item>
+              ))}
+            </Select>
           )}
         />
 
