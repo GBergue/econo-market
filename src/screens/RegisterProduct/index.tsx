@@ -45,16 +45,15 @@ export default function RegisterProduct() {
 
   useEffect(() => {
     api.get<CategoryDTO[]>("/search/category").then(({ data }) => {
-      console.log(data);
       setCategories(data);
     });
     api.get<MarketDTO[]>("/search/market").then(({ data }) => {
-      console.log(data);
-      setMarkets(data);
+      const { content } = data;
+      setMarkets(content);
     });
     api.get<BrandDTO[]>("/search/brand").then(({ data }) => {
-      console.log(data);
-      setBrands(data);
+      const { content } = data;
+      setBrands(content);
     });
     api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
       console.log(data);
