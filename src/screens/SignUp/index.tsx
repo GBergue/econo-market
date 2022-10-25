@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import { VStack, Center } from 'native-base';
+import { ScrollView, Center, KeyboardAvoidingView } from 'native-base';
 import { useForm, Controller  } from 'react-hook-form';
 import {
   Ionicons,
@@ -80,157 +80,159 @@ export default function SignUp() {
   }
 
   return (
-    <VStack
+    <ScrollView
       bg="gray.200"
       padding={50}
       flex={1}
     >
+      <KeyboardAvoidingView>
 
-      {isLoading && <Loading/>}
+        {isLoading && <Loading/>}
 
-      <Center>
-        <LogoAzul height={200} width={200} />
-      </Center>
+        <Center>
+          <LogoAzul height={200} width={200} />
+        </Center>
 
-      <Heading
-        textAlign="center"
-        marginBottom={8}
-      >
-        Cadastrar
-      </Heading>
+        <Heading
+          textAlign="center"
+          marginBottom={8}
+        >
+          Cadastrar
+        </Heading>
 
-      <Controller
-        control={control}
-        name="name"
-        rules={{
-          maxLength: {
-            value: 50,
-            message: 'Tamanho máximo de 50 caracteres'
-          },
-          minLength: {
-            value: 3,
-            message: 'Tamanho mínimo de 3 caracteres'
-          },
-          required: 'Nome é obrigátorio',
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input 
-            placeholder='Nome'
-            marginBottom={!!errors.name ? 2 : 8}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            isInvalid={!!errors.name}
-            InputLeftElement={
-              <Ionicons
-                name="person"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-              />
-            }
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="name"
+          rules={{
+            maxLength: {
+              value: 50,
+              message: 'Tamanho máximo de 50 caracteres'
+            },
+            minLength: {
+              value: 3,
+              message: 'Tamanho mínimo de 3 caracteres'
+            },
+            required: 'Nome é obrigátorio',
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input 
+              placeholder='Nome'
+              marginBottom={!!errors.name ? 2 : 8}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              isInvalid={!!errors.name}
+              InputLeftElement={
+                <Ionicons
+                  name="person"
+                  size={20}
+                  color={theme.colors.gray[700]}
+                  style={{ paddingStart: 8 }}
+                />
+              }
+            />
+          )}
+        />
 
-      {getErrorMsg('name')}
+        {getErrorMsg('name')}
 
-      <Controller
-        control={control}
-        name="email"
-        rules={{
-          maxLength: {
-            value: 100,
-            message: 'Tamanho máximo de 100 caracteres'
-          },
-          minLength: {
-            value: 3,
-            message: 'Tamanho mínimo de 3 caracteres'
-          },
-          required: 'Email é obrigátorio',
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input 
-            placeholder='Email'
-            marginBottom={!!errors.email ? 2 : 8}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            isInvalid={!!errors.email}
-            InputLeftElement={
-              <MaterialIcons
-                name="email"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-              />
-            }
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="email"
+          rules={{
+            maxLength: {
+              value: 100,
+              message: 'Tamanho máximo de 100 caracteres'
+            },
+            minLength: {
+              value: 3,
+              message: 'Tamanho mínimo de 3 caracteres'
+            },
+            required: 'Email é obrigátorio',
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input 
+              placeholder='Email'
+              marginBottom={!!errors.email ? 2 : 8}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              isInvalid={!!errors.email}
+              InputLeftElement={
+                <MaterialIcons
+                  name="email"
+                  size={20}
+                  color={theme.colors.gray[700]}
+                  style={{ paddingStart: 8 }}
+                />
+              }
+            />
+          )}
+        />
 
-      {getErrorMsg('email')}
+        {getErrorMsg('email')}
 
-      <Controller
-        control={control}
-        name="password"
-        rules={{
-          maxLength: {
-            value: 50,
-            message: 'Tamanho máximo de 50 caracteres'
-          },
-          minLength: {
-            value: 3,
-            message: 'Tamanho mínimo de 3 caracteres'
-          },
-          required: 'Senha é obrigátoria',
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input 
-            placeholder='Senha'
-            secureTextEntry={!showPassword}
-            marginBottom={!!errors.password ? 2 : 8}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            isInvalid={!!errors.password}
-            InputLeftElement={
-              <FontAwesome5
-                name="key"
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingStart: 8 }}
-              />
-            }
-            InputRightElement={
-              <Feather
-                name={showPassword ? "eye" : "eye-off"}
-                size={20}
-                color={theme.colors.gray[700]}
-                style={{ paddingEnd: 8 }}
-                onPress={() => setShowPassword((x) => !x)}
-              />
-            }
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="password"
+          rules={{
+            maxLength: {
+              value: 50,
+              message: 'Tamanho máximo de 50 caracteres'
+            },
+            minLength: {
+              value: 3,
+              message: 'Tamanho mínimo de 3 caracteres'
+            },
+            required: 'Senha é obrigátoria',
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input 
+              placeholder='Senha'
+              secureTextEntry={!showPassword}
+              marginBottom={!!errors.password ? 2 : 8}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              isInvalid={!!errors.password}
+              InputLeftElement={
+                <FontAwesome5
+                  name="key"
+                  size={20}
+                  color={theme.colors.gray[700]}
+                  style={{ paddingStart: 8 }}
+                />
+              }
+              InputRightElement={
+                <Feather
+                  name={showPassword ? "eye" : "eye-off"}
+                  size={20}
+                  color={theme.colors.gray[700]}
+                  style={{ paddingEnd: 8 }}
+                  onPress={() => setShowPassword((x) => !x)}
+                />
+              }
+            />
+          )}
+        />
 
-      {getErrorMsg('password')}
+        {getErrorMsg('password')}
 
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        isLoading={isLoading}
-        marginBottom={4}
-      >
-        Cadastrar
-      </Button>
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          isLoading={isLoading}
+          marginBottom={4}
+        >
+          Cadastrar
+        </Button>
 
-      <Button
-        onPress={() => navigation.navigate('login')}
-        bg="gray.400"
-      >
-        Voltar
-      </Button>
-    </VStack>
+        <Button
+          onPress={() => navigation.navigate('login')}
+          bg="gray.400"
+        >
+          Voltar
+        </Button>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }

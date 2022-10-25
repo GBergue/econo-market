@@ -6,7 +6,11 @@ const api = axios.create({
 
 
 export function setToken(access_token: string) {
-  api.defaults.headers.common.Authorization = `Bearer ${access_token}`
+  api.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+}
+
+export function clearAuthorization() {
+  api.defaults.headers.common.Authorization = '';
 }
 
 

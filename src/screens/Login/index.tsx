@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { VStack, Center } from 'native-base';
+import { VStack, Center, KeyboardAvoidingView, ScrollView } from 'native-base';
 import { Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -79,12 +79,13 @@ export default function Login() {
 
 
   return (
-    <VStack
+    
+    <ScrollView
       bg="gray.100"
       paddingX={8}
       flex={1}
     >
-
+      <KeyboardAvoidingView>
       {isLoading && <Loading/>}
 
       <Center>
@@ -202,6 +203,7 @@ export default function Login() {
         Ainda não possui cadastro? <Text color="primary.400" fontSize="sm" onPress={() => navigate("signup")}>Cadastre-se</Text>
       </Text>
       
-    </VStack>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }

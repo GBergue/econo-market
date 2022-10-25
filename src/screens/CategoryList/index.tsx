@@ -1,38 +1,43 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import {
   VStack,
   FlatList,
   ScrollView,
   Stack,
+  Center,
 } from "native-base";
+import { Alert, View } from "react-native";
+
 import Text from "../../components/Text";
 import Card from "../../components/Card";
-
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
-import { View } from "react-native";
+import Loading from "../..//components/Loading";
 
+import { CategoryDTO } from "../../model/category";
 
-let data = [
-  { categoria: 'Bebidas' },
-  { categoria: 'Carnes' },
-  { categoria: 'Congelados' },
-  { categoria: 'Frios/Lacticínios' },
-  { categoria: 'Mercearia' },
-  { categoria: 'Cereais' },
-  { categoria: 'Doces' },
-  { categoria: 'Hortifruti' },
-  { categoria: 'Higiene e Beleza' },
-  { categoria: 'Limpeza' },
-  { categoria: 'Pet-Shop' },
-  { categoria: 'Jardinagem' },
-  { categoria: 'Bazar' },
-  { categoria: 'Outros' },
-]
-//data = [];
+import api from "../../api";
+import { LoadingComponent } from "./components/LoadingCategory";
+
 
 export default function CategoryList() {
+  const [categories, setCategories] = useState<CategoryDTO[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setLoading(true);
+    api.get<CategoryDTO[]>('/search/category')
+      .then(({ data }) => {
+        setTimeout(() => {
+          setCategories(data);
+        }, 5000);
+      })
+      .catch(err => {
+        console.error(err);
+        Alert.alert('Falha de conexão', err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
 
   return (
@@ -41,19 +46,21 @@ export default function CategoryList() {
       <VStack flex={1} paddingX={8}>
         
       <Heading
-          mt={4}
-          mb={2}
-        >
+        mt={4}
+        mb={2}
+      >
           Categorias
         </Heading>
         <ScrollView  flex={1}>
         <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
-        
+          {/* {isLoading && (
+              
+          )} */}
         {
-            data.map(({ categoria }, index) => {
+            categories.map(({ name, id }, index) => {
                 
                 return (
-                    <Stack width="50%">
+                    <Stack key={id} width="50%">
                         <Card
                             bg="white"
                             mr={index % 2 == 0 ? 2 : 0}
@@ -62,11 +69,11 @@ export default function CategoryList() {
                             height={100}
                             rounded="sm"
                             p={4}
-                            onPress={() => console.log(categoria)}
+                            onPress={() => console.log(name)}
                             alignItems="center"
                             justifyContent="center"
                         >
-                            <Text fontSize="lg" color="gray.700">{categoria}</Text>
+                            <Text fontSize="md" color="gray.700">{name}</Text>
                         </Card>
                     </Stack>
                 );
