@@ -36,9 +36,9 @@ export default function RegisterProduct() {
     defaultValues: {
       name: "",
       brand: "",
-      categorty: "",
+      category: "",
       unity: "",
-      market: "",
+      markets: "",
       price: "",
     },
   });
@@ -49,6 +49,7 @@ export default function RegisterProduct() {
     });
     api.get<MarketDTO[]>("/search/market").then(({ data }) => {
       const { content } = data;
+      // console.log(content);
       setMarkets(content);
     });
     api.get<BrandDTO[]>("/search/brand").then(({ data }) => {
@@ -56,7 +57,6 @@ export default function RegisterProduct() {
       setBrands(content);
     });
     api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
-      console.log(data);
       setUnities(data);
     });
   }, []);
@@ -83,24 +83,47 @@ export default function RegisterProduct() {
     return null;
   }
 
-  function OnSubmit({ name, price, unity, brand, categorty, market }) {
+  function OnSubmit({ name, price, unity, brand: brandid, category: categoryid, markets: marketid }) {
     setIsLoading(true);
-
-    api.post("register/product", {
+    console.log({
       name,
       price,
       unity,
-      brand,
-      categorty,
-      market,
-    })
+      brand: {
+        id: brandid,
+      },
+      category: {
+        id: categoryid
+      },
+      markets: [{
+        id: marketid
+      }],
+    });
+    // unity = parseInt(unity);
+    //  brand = {brand};
+    api
+      .post("register/product", {
+        name,
+        price,
+        unity,
+        brand: {
+          id: brandid,
+        },
+        category: {
+          id: categoryid
+        },
+        markets: [{
+          id: marketid
+        }],
+      })
       .then(() => {
         toast.show({
-          description: 'Produto adiiconado com sucesso!'
-        })
-      })  
+          description: "Produto adiiconado com sucesso!",
+        });
+      })
       .catch((err) => {
         Alert.alert("Não foi possível cadastrar o produto, tente novamente!");
+        console.log(err);
       })
       .finally(() => setIsLoading(false));
   }
@@ -147,10 +170,7 @@ export default function RegisterProduct() {
               value: 100,
               message: "Tamanho máximo de 100 caracteres",
             },
-            minLength: {
-              value: 3,
-              message: "Tamanho mínimo de 3 caracteres",
-            },
+
             required: "Marca é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -168,7 +188,7 @@ export default function RegisterProduct() {
                 <NBSelect.Item
                   key={id}
                   label={brandName}
-                  value={brandName}
+                  value={String(id)}
                 ></NBSelect.Item>
               ))}
             </Select>
@@ -179,16 +199,13 @@ export default function RegisterProduct() {
 
         <Controller
           control={control}
-          name="categorty"
+          name="category"
           rules={{
             maxLength: {
               value: 50,
               message: "Tamanho máximo de 50 caracteres",
             },
-            minLength: {
-              value: 3,
-              message: "Tamanho mínimo de 3 caracteres",
-            },
+
             required: "Categoria é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -200,21 +217,20 @@ export default function RegisterProduct() {
               _selectedItem={{
                 bg: "primary.400",
               }}
-              mb={!!errors.categorty ? 2 : 4}
+              mb={!!errors.category ? 2 : 4}
             >
               {categories.map(({ name, id }) => (
                 <NBSelect.Item
                   key={id}
                   label={name}
-                  value={name}
+                  value={String(id)}
                 ></NBSelect.Item>
               ))}
             </Select>
           )}
         />
-       
 
-        {getErrorMsg("categorty")}
+        {getErrorMsg("category")}
 
         <Controller
           control={control}
@@ -224,10 +240,7 @@ export default function RegisterProduct() {
               value: 100,
               message: "Tamanho máximo de 100 caracteres",
             },
-            minLength: {
-              value: 3,
-              message: "Tamanho mínimo de 3 caracteres",
-            },
+
             required: "Unidade é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -245,7 +258,7 @@ export default function RegisterProduct() {
                 <NBSelect.Item
                   key={abbreviation}
                   label={description}
-                  value={description}
+                  value={abbreviation}
                 ></NBSelect.Item>
               ))}
             </Select>
@@ -256,15 +269,11 @@ export default function RegisterProduct() {
 
         <Controller
           control={control}
-          name="market"
+          name="markets"
           rules={{
             maxLength: {
               value: 100,
               message: "Tamanho máximo de 100 caracteres",
-            },
-            minLength: {
-              value: 3,
-              message: "Tamanho mínimo de 3 caracteres",
             },
             required: "Mercado é obrigatório",
           }}
@@ -277,20 +286,20 @@ export default function RegisterProduct() {
               _selectedItem={{
                 bg: "primary.400",
               }}
-              mb={!!errors.market ? 2 : 4}
+              mb={!!errors.markets ? 2 : 4}
             >
               {markets.map(({ name, id }) => (
                 <NBSelect.Item
                   key={id}
                   label={name}
-                  value={name}
+                  value={String(id)}
                 ></NBSelect.Item>
               ))}
             </Select>
           )}
         />
 
-        {getErrorMsg("market")}
+        {getErrorMsg("markets")}
 
         <Controller
           control={control}
