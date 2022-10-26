@@ -18,18 +18,23 @@ import { CategoryDTO } from "../../model/category";
 
 import api from "../../api";
 import { LoadingComponent } from "./components/LoadingCategory";
+import { Pagination } from "src/model/pagination";
+import { Product } from "src/model/product";
+import { useNavigation } from "@react-navigation/native";
 
 
 export default function CategoryList() {
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const navigation = useNavigation();
+
 
   useEffect(() => {
     setLoading(true);
     api.get<CategoryDTO[]>('/search/category')
       .then(({ data }) => {
+        setCategories(data);
         setTimeout(() => {
-          setCategories(data);
         }, 5000);
       })
       .catch(err => {
@@ -38,6 +43,10 @@ export default function CategoryList() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  function handleLoadCategory(categoryId) {
+    navigation.navigate('searchProductByCategory', { categoryId });
+  }
 
 
   return (
@@ -69,7 +78,7 @@ export default function CategoryList() {
                             height={100}
                             rounded="sm"
                             p={4}
-                            onPress={() => console.log(name)}
+                            onPress={() => handleLoadCategory(id)}
                             alignItems="center"
                             justifyContent="center"
                         >
