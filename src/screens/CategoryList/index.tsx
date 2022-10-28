@@ -34,18 +34,40 @@ export default function CategoryList() {
     api.get<CategoryDTO[]>('/search/category')
       .then(({ data }) => {
         setCategories(data);
-        setTimeout(() => {
-        }, 5000);
       })
       .catch(err => {
-        console.error(err);
+        console.log(err);
         Alert.alert('Falha de conexão', err);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  function handleLoadCategory(categoryId) {
+  
+  function handleLoadCategory(categoryId: number) {
     navigation.navigate('searchProductByCategory', { categoryId });
+  }
+
+  function renderCategoryComponent(index: number, item: CategoryDTO) {
+    return (
+      <Stack key={item.id} width="50%">
+          <Card
+              bg="white"
+              mr={index % 2 == 0 ? 2 : 0}
+              ml={index % 2 == 0 ? 0 : 2}
+              mb={4}
+              height={100}
+              rounded="sm"
+              p={4}
+              onPress={() => handleLoadCategory(item.id)}
+              alignItems="center"
+              justifyContent="center"
+          >
+              <Text fontSize="md" color="gray.700">{item.name}</Text>
+          </Card>
+      </Stack>
+    );
   }
 
 
@@ -60,43 +82,27 @@ export default function CategoryList() {
       >
           Categorias
         </Heading>
-        <ScrollView  flex={1}>
+        <ScrollView showsVerticalScrollIndicator={false} mt={2} flex={1}>
         <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
-          {/* {isLoading && (
-              
-          )} */}
+          {isLoading && (
+            <>
+            <Text>111</Text>
+            <LoadingComponent/>  
+            </>
+          )}
         {
-            categories.map(({ name, id }, index) => {
+            categories.map((item, index) => {
                 
                 return (
-                    <Stack key={id} width="50%">
-                        <Card
-                            bg="white"
-                            mr={index % 2 == 0 ? 2 : 0}
-                            ml={index % 2 == 0 ? 0 : 2}
-                            mb={4}
-                            height={100}
-                            rounded="sm"
-                            p={4}
-                            onPress={() => handleLoadCategory(id)}
-                            alignItems="center"
-                            justifyContent="center"
-                        >
-                            <Text fontSize="md" color="gray.700">{name}</Text>
-                        </Card>
-                    </Stack>
+                  renderCategoryComponent(index, item)
                 );
             })
         }
         </View>
         </ScrollView>
         {/* <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <Card width="45%" bg="white" mb={4} rounded="sm" p={4} onPress={() => console.log(item)}>
-              <Text fontSize="lg" color="gray.700">{item.categoria}</Text>
-            </Card>
-          )}
+          data={categories}
+          renderItem={({ item, index }) => renderCategoryComponent(index, item)}
         /> */}
 
       </VStack>

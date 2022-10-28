@@ -17,11 +17,12 @@ import { Product } from "src/model/product";
 
 import api from "../../api";
 import ProductCard from "./components/ProductCard";
+import { LoadingComponent } from "./components/Loading";
 
 
 export default function SearchProductByCategory({ route }) {
   const [data, setData] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const { categoryId } = route.params;
 
 
@@ -32,8 +33,7 @@ export default function SearchProductByCategory({ route }) {
         setData(data.content);
       })
       .catch(err => {
-        console.error(err);
-        //Alert.alert('Falha de conexão', err);
+        console.log(err);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -61,6 +61,10 @@ export default function SearchProductByCategory({ route }) {
     <VStack bg="gray.100" flex={1}>
       <Header title="Busca" />
       <VStack flex={1} paddingX={8} paddingTop={8}>
+
+        { isLoading && (
+          <LoadingComponent/>
+        )}
 
         <FlatList
           data={data}

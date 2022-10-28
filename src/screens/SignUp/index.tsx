@@ -58,26 +58,28 @@ export default function SignUp() {
 
   function onSubmit({ name, email, password }) {
     setIsLoading(true);
-    console.log(name, email, password);
 
-    // api.post('/user', {
-    //   name: 'teste',
-    //   email: 'email',
-    //   password: '123123'
-    // })
-    axios.post('https://api-economarket.herokuapp.com/user', {
-      name: 'teste',
-      email: 'email',
-      password: '123123'
-    })    
-      .then(res => console.log(res))
+    api.post('/user', {
+      name,
+      email,
+      password,
+    })
+      .then(res => {
+        navigation.navigate('login');
+      })
       .catch(err => {
         console.error(err);
-        console.error(err.message);
-        //Alert.alert('Erro ao realizar cadastro', err);
+        Alert.alert('', 'Erro ao realizar cadastro!');
       })
       .finally(() => setIsLoading(false));
   }
+
+  function validate(email: string) {
+    const matches = email.toLowerCase().match(
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    );
+    return matches?.length > 0 || "Deve ser um email valido"; 
+  };
 
   return (
     <ScrollView
@@ -86,8 +88,6 @@ export default function SignUp() {
       flex={1}
     >
       <KeyboardAvoidingView>
-
-        {isLoading && <Loading/>}
 
         <Center>
           <LogoAzul height={200} width={200} />
@@ -149,6 +149,7 @@ export default function SignUp() {
               message: 'Tamanho mínimo de 3 caracteres'
             },
             required: 'Email é obrigátorio',
+            validate,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input 

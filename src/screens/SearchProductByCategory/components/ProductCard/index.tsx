@@ -1,20 +1,14 @@
 import React from 'react';
 import { HStack, VStack } from 'native-base';
+
+import { Product } from 'src/model/product';
+
 import Card from '../../../../components/Card';
 import Text from '../../../../components/Text';
 
 
-interface productItem {
-    name: string,
-    brand: string,
-    market: string,
-    date: string,
-    price: string,
-    unid: string,
-}
-
 interface Props {
-    item: productItem,
+    item: Product,
 }
 
 
@@ -37,8 +31,8 @@ export default function ProductCard({ item } : Props) {
                 justifyContent="space-between"
             >
                 <Text
-                    fontFamily="heading"
-                    fontSize="lg"
+                    fontFamily="body"
+                    fontSize="md"
                     color="gray.800"
                 >
                     {name}

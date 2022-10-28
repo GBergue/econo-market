@@ -30,8 +30,8 @@ export default function ProductCard({ item } : Props) {
                 justifyContent="space-between"
             >
                 <Text
-                    fontFamily="heading"
-                    fontSize="lg"
+                    fontFamily="body"
+                    fontSize="md"
                     color="gray.800"
                 >
                     {item.name}
@@ -73,7 +73,7 @@ export default function ProductCard({ item } : Props) {
                 </Text>
                 <Text
                     fontFamily="heading"
-                    fontSize="lg"
+                    fontSize="md"
                     color="gray.800"
                 >
                     {item.price}
