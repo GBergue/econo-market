@@ -12,6 +12,7 @@ import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
 import Select from "../../components/Select";
+import Autocomplete from "../../components/Autocomplete";
 
 import api from "../../api";
 
@@ -28,6 +29,7 @@ export default function RegisterProduct() {
   const [brands, setBrands] = useState<BrandDTO[]>([]);
   const [unities, setUnities] = useState<UnityDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showModalBrands, setShowModalBrands] = useState(false);
   const {
     control,
     handleSubmit,
@@ -62,7 +64,7 @@ export default function RegisterProduct() {
   }, []);
 
   function validate(value: string) {
-    const matches = value.match("^[0-9,.]+$");
+    const matches = value.match("^[0-9.]+$");
     return matches?.length > 0 || "Apenas números";
   }
 
@@ -118,7 +120,7 @@ export default function RegisterProduct() {
       })
       .then(() => {
         toast.show({
-          description: "Produto adiiconado com sucesso!",
+          description: "Produto adicionado com sucesso!",
         });
       })
       .catch((err) => {
@@ -174,24 +176,16 @@ export default function RegisterProduct() {
             required: "Marca é obrigatório",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <Select
+            <Autocomplete
               accessibilityLabel="Marca"
               placeholder="Marca"
-              onValueChange={onChange}
+              onChangeText={onChange}
               selectedValue={value}
-              _selectedItem={{
-                bg: "primary.400",
-              }}
+              onBlur={onBlur}
               mb={!!errors.brand ? 2 : 4}
-            >
-              {brands.map(({ brandName, id }) => (
-                <NBSelect.Item
-                  key={id}
-                  label={brandName}
-                  value={String(id)}
-                ></NBSelect.Item>
-              ))}
-            </Select>
+              showModal={showModalBrands}
+              setShowModal={setShowModalBrands}
+            />
           )}
         />
 
@@ -231,6 +225,8 @@ export default function RegisterProduct() {
         />
 
         {getErrorMsg("category")}
+
+        
 
         <Controller
           control={control}
@@ -315,7 +311,7 @@ export default function RegisterProduct() {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              keyboardType="number-pad"
+              keyboardType="numeric"
               isInvalid={!!errors.price}
             />
           )}

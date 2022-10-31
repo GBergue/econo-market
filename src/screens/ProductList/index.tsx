@@ -40,7 +40,7 @@ export default function ProductList() {
 
 
   function onChange(text: string) {
-    if (text && text.length > 2) {
+    if (text) {
       if (idTimeout.current) {
         clearTimeout(idTimeout.current);
       }
