@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from "../../theme/theme";
 import {
@@ -7,79 +7,64 @@ import {
   Icon,
 } from "native-base";
 
-import LogoAzul from "@assets/logo_azul.svg";
-
 import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import ProductCard from "./components/productCard";
+import api from "../../api";
+import { Pagination } from "src/model/pagination";
+import { Product } from "src/model/product";
 
 
-let data = [
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-    {
-        name: 'Pera',
-        brand: 'Marca',
-        market: 'Mercado',
-        date: 'Ultima atualização 01/07/2022',
-        price: 'R$ 5,99',
-        unid: 'KG',
-    },
-  
-];
-//data = [];
+const SEGUNDO = 1000;
 
 export default function ProductList() {
+  const [search, setSearch] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<Pagination<Product>>({ content: [] });
+  const idTimeout = useRef<NodeJS.Timeout>();
+
+
+  function handleSearch(text: string) {
+    setLoading(true);
+    api.get(`/search/product/name?name=${text}`)
+      .then(({ data }) => {
+        setData(data);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setLoading(false));
+  }
+
+
+  function onChange(text: string) {
+    if (text && text.length > 2) {
+      if (idTimeout.current) {
+        clearTimeout(idTimeout.current);
+      }
+      idTimeout.current = setTimeout(() => {
+        handleSearch(text);
+      }, SEGUNDO * 1,5);
+    }
+    setSearch(text);
+  }
+
   function renderHeaderList() {
-    if (!data.length) return null;
+    if (isLoading || !data.content.length) return null;
 
     return (
       <Text fontSize="md" color="gray.400" mb={4}>
-        {`${data.length} ${data.length > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
+        {`${data.content.length} ${data.content.length > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
       </Text>
     );
   }
 
+
   function renderListEmpty() {
+    if (isLoading) return null;
+
     return (
       <Text fontSize="md" color="gray.400">
         Não foi encontrado, tente novamente
@@ -92,11 +77,16 @@ export default function ProductList() {
       <Header title="Busca" />
       <VStack flex={1} paddingX={8}>
         <Input
-          placeholder="item ou mercado"
+          placeholder="Digite o produto"
           width="100%"
           rounded="sm"
           bg="white"
           my={4}
+          value={search}
+          onChangeText={onChange}
+          onEndEditing={() => console.log('onEndEditing')}
+          onTouchEndCapture={() => console.log('onTouchEndCapture')}
+          onBlur={() => console.log('onBLur')}
           InputLeftElement={
             <Icon
             name="ios-search"
@@ -109,7 +99,7 @@ export default function ProductList() {
         />
 
         <FlatList
-          data={data}
+          data={data.content}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderHeaderList()}
           ListEmptyComponent={renderListEmpty()}
