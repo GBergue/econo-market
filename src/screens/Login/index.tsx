@@ -20,6 +20,8 @@ import Loading from '../../components/Text';
 
 import LogoAzul from '@assets/logo_azul.svg';
 import AuthContext from '../../context/AuthContext';
+import jwtDecode from 'jwt-decode';
+import { TokenInfo } from 'src/model/token';
 
 
 export default function Login() {
@@ -56,7 +58,6 @@ export default function Login() {
   }
 
 
-
   function onSubmit({ email, password }) {
     setIsLoading(true);
 
@@ -66,20 +67,21 @@ export default function Login() {
     })
       .then(({ data }) => {
         const { access_token } = data;
+        const { user_id } = jwtDecode<TokenInfo>(access_token);
+
         if (access_token) {
           setToken(access_token);
-          setAuthenticated(true);
+          setAuthenticated(user_id);
         }
       })
       .catch(err => {
-        Alert.alert("Verifique se o usuario e senha estão corretos.");
+        Alert.alert('', 'Verifique se o usuario e senha estão corretos.');
       })
       .finally(() =>  setIsLoading(false));
   }
 
 
   return (
-    
     <ScrollView
       bg="gray.100"
       paddingX={8}

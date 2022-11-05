@@ -70,7 +70,7 @@ export default function Main() {
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Mercados" />
+      <Header/>
       <VStack flex={1} paddingX={8}>
         <Heading
           mt={4}

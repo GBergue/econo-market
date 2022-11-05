@@ -132,9 +132,9 @@ export default function RegisterProduct() {
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Cadastro" />
+      <Header/>
       <ScrollView paddingX={8}>
-        <Heading marginY={8}>Informe os dados do produto</Heading>
+        <Heading marginY={4}>Informe os dados do produto</Heading>
 
         <Controller
           control={control}

@@ -8,6 +8,8 @@ import {
   Button,
   Pressable,
   useContrastText,
+  Menu,
+  HamburgerIcon,
  } from 'native-base';
  import { Feather } from '@expo/vector-icons';
 
@@ -18,19 +20,19 @@ import Text from '../Text';
 import api, { clearAuthorization } from '../../api';
 
 import AuthContext from '../../context/AuthContext';
+import Heading from '../Heading';
 
 
-export default function Header ({ title }) {
-  const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
+export default function Header () {
+  const { setAuthenticated } = useContext(AuthContext);
 
   function handleLogout() {
-    
     api.post('/auth/logout')
       .catch((err) => {
         console.error(err);
       })
       .finally(() => {
-        setAuthenticated(false);
+        setAuthenticated(0);
         clearAuthorization();
       });
   }
@@ -39,20 +41,22 @@ export default function Header ({ title }) {
   return (
     <VStack
       bg="primary.500"
-      padding={2}
       pt={8}
+      pb={4}
+      px={4}
     >
       <HStack
         w="full"
         justifyContent="space-between"
         alignItems="center"
       >
-        <LogoWhite
+        {/* <LogoWhite
           height={75}
           width={75}
-        />
+        /> */}
+        <Heading color="white">EconoMarket</Heading>
 
-        <Popover
+        {/* <Popover
           placement='bottom'
           trigger={triggerProps => {
             return (
@@ -75,7 +79,31 @@ export default function Header ({ title }) {
             </Pressable>
           </Popover.Body>
         </Popover.Content>
-      </Popover>
+      </Popover> */}
+
+      
+        <Menu
+          offset={70}
+          shouldOverlapWithTrigger={false}
+          placement="bottom right"
+          trigger={triggerProps => (
+            <Pressable {...triggerProps}>
+              <Icon
+                as={Feather}
+                name="menu"
+                color="white"
+                size={8}
+              />
+            </Pressable>
+          )}
+        >
+          <Menu.Item>
+            <Pressable onPress={handleLogout}>
+              <Text>Log out</Text>
+            </Pressable>
+          </Menu.Item>
+        </Menu>
+      
 
         
       </HStack>

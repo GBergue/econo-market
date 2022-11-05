@@ -1,10 +1,8 @@
 import React, {useEffect, useState } from "react";
 import {
   VStack,
-  FlatList,
   ScrollView,
   Stack,
-  Center,
 } from "native-base";
 import { Alert, View } from "react-native";
 
@@ -12,14 +10,11 @@ import Text from "../../components/Text";
 import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
-import Loading from "../..//components/Loading";
 
 import { CategoryDTO } from "../../model/category";
 
 import api from "../../api";
 import { LoadingComponent } from "./components/LoadingCategory";
-import { Pagination } from "src/model/pagination";
-import { Product } from "src/model/product";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -73,16 +68,15 @@ export default function CategoryList() {
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Categorias" />
+      <Header/>
       <VStack flex={1} paddingX={8}>
         
-      <Heading
-        mt={4}
-        mb={2}
-      >
+        <Heading my={4}>
           Categorias
         </Heading>
+
         <ScrollView showsVerticalScrollIndicator={false} mt={2} flex={1}>
+        
         <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
           {isLoading && (
             <>
@@ -91,20 +85,10 @@ export default function CategoryList() {
             </>
           )}
         {
-            categories.map((item, index) => {
-                
-                return (
-                  renderCategoryComponent(index, item)
-                );
-            })
+          categories.map((item, index) => renderCategoryComponent(index, item))
         }
         </View>
         </ScrollView>
-        {/* <FlatList
-          data={categories}
-          renderItem={({ item, index }) => renderCategoryComponent(index, item)}
-        /> */}
-
       </VStack>
     </VStack>
   );

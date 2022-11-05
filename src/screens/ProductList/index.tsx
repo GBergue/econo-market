@@ -74,7 +74,7 @@ export default function ProductList() {
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Busca" />
+      <Header/>
       <VStack flex={1} paddingX={8}>
         <Input
           placeholder="Digite o produto"
