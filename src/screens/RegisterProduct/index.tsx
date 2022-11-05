@@ -124,7 +124,7 @@ export default function RegisterProduct() {
         });
       })
       .catch((err) => {
-        Alert.alert("Não foi possível cadastrar o produto, tente novamente!");
+        Alert.alert('', 'Não foi possível cadastrar o produto, tente novamente!');
         console.log(err);
       })
       .finally(() => setIsLoading(false));
