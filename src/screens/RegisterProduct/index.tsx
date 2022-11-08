@@ -65,7 +65,7 @@ export default function RegisterProduct() {
 
   function validate(value: string) {
     const matches = value.match("^[0-9.]+$");
-    return matches?.length > 0 || "Apenas números";
+    return matches?.length > 0 || "Apenas números e ponto final";
   }
 
   function getErrorMsg(field: string) {
@@ -85,31 +85,66 @@ export default function RegisterProduct() {
     return null;
   }
 
-  function OnSubmit({ name, price, unity, brand: brandid, category: categoryid, markets: marketid }) {
+  function OnSubmit({
+    name,
+    price,
+    unity,
+    brand: brandid,
+    category: categoryid,
+    markets: marketid,
+  }) {
     setIsLoading(true);
-    console.log({
-      name,
-      price,
-      unity,
-      brand: {
-        id: brandid,
-      },
-      category: {
-        id: categoryid
-      },
-      markets: [{
-        id: marketid
-      }],
-    });
-    // unity = parseInt(unity);
-    //  brand = {brand};
-    api
+    if (isNaN(brandid)) {
+      // console.log({ brandName: brandid });
+      api
+        .post("register/brand", {
+          brandName: brandid,
+        })
+        .then(({data}) => {
+          // console.log("id gerado = ",data);
+          // idAuxiliar = data;
+          api
+          .post("register/product", {
+            name,
+            price,
+            unity,
+            brand: {
+              id: data
+            },
+            category: {
+              id: categoryid
+            },
+            markets: [{
+              id: marketid
+            }],
+          })
+          .then(() => {
+            toast.show({
+              description: "Produto adicionado com sucesso!",
+            });
+          })
+          .catch((err) => {
+            Alert.alert('', 'Não foi possível cadastrar o produto, tente novamente!');
+            console.log(err);
+          })
+          .finally(() => setIsLoading(false));
+        })
+        .catch((err) => {
+          Alert.alert(
+            "",
+            "Não foi possível cadastrar a marca, tente novamente!"
+          );
+          console.log(err);
+        })
+        .finally(() => setIsLoading(false));
+    }else{
+      api
       .post("register/product", {
         name,
         price,
         unity,
         brand: {
-          id: brandid,
+          id: brandid
         },
         category: {
           id: categoryid
@@ -128,13 +163,32 @@ export default function RegisterProduct() {
         console.log(err);
       })
       .finally(() => setIsLoading(false));
+    }
+    // console.log({
+    //   name,
+    //   price,
+    //   unity,
+    //   brand: {
+    //     id: brandid
+    //   },
+    //   category: {
+    //     id: categoryid,
+    //   },
+    //   markets: [
+    //     {
+    //       id: marketid,
+    //     },
+    //   ],
+    // });
+   
+
   }
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header/>
+      <Header title="Cadastro" />
       <ScrollView paddingX={8}>
-        <Heading marginY={4}>Informe os dados do produto</Heading>
+        <Heading marginY={8}>Informe os dados do produto</Heading>
 
         <Controller
           control={control}
@@ -225,8 +279,6 @@ export default function RegisterProduct() {
         />
 
         {getErrorMsg("category")}
-
-        
 
         <Controller
           control={control}
