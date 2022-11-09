@@ -6,4 +6,9 @@ export type Pagination<T> = {
   numberOfElements: number;
   totalElements: number;
   totalPages: number;
+  pageable: Pageable;
+}
+
+type Pageable = {
+  pageNumber: number;
 }

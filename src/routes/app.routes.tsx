@@ -34,7 +34,7 @@ function getTabIcon( route, focused: boolean, color: string, size: number ) {
   else if (route.name === 'shoppingList') {
     return (<AntDesign name="shoppingcart" size={size} color={color} />);
   }
-  console.log(iconSize);
+
   return <Ionicons name={iconName} size={iconSize} color={color} />;
 }
 

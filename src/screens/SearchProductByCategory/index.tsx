@@ -1,80 +1,92 @@
-import React, { useEffect, useState } from "react";
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
 import { theme } from "../../theme/theme";
 import {
   VStack,
   FlatList,
-  Icon,
+  Center,
 } from "native-base";
 
-import LogoAzul from "@assets/logo_azul.svg";
+import useApi from "../../hooks/useApi";
 
 import Text from "../../components/Text";
 import Header from "../../components/Header";
-import Input from "../../components/Input";
-import { Pagination } from "src/model/pagination";
+
 import { Product } from "src/model/product";
 
-import api from "../../api";
 import ProductCard from "./components/ProductCard";
 import { LoadingComponent } from "./components/Loading";
 
 
+
 export default function SearchProductByCategory({ route }) {
-  const [data, setData] = useState<Product[]>([]);
-  const [isLoading, setLoading] = useState(false);
   const { categoryId } = route.params;
+  const {
+    apiData,
+    getApiData,
+    isLoading,
+    loadMore,
+  } = useApi<Product>({ url: `/search/product/category/${categoryId}` });
 
-
+  
   useEffect(() => {
-    setLoading(true);
-    api.get<Pagination<Product>>(`/search/product/category/${categoryId}`)
-      .then(({ data }) => {
-        setData(data.content);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => setLoading(false));
+    getApiData();
   }, []);
 
-
   function renderHeaderList() {
-    if (!data.length) return null;
+    if (!apiData || !apiData.content.length) return null;
 
     return (
       <Text fontSize="md" color="gray.400" mb={4}>
-        {`${data.length} ${data.length > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
+        {`${apiData.totalElements} ${apiData.totalElements > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
       </Text>
     );
   }
 
   function renderListEmpty() {
-    return (
-      <Text fontSize="md" color="gray.400">
-        Não foi encontrado, tente novamente
-      </Text>
-    );
+    if (!isLoading) {
+      return (
+        <Text fontSize="md" color="gray.400">
+          Não foi encontrado, tente novamente
+        </Text>
+      );
+    }
+  }
+
+  function renderLoader() {
+    if (isLoading && apiData.content.length) {
+      return (
+        <Center>
+          <ActivityIndicator
+            size={"large"}
+          />
+        </Center>
+      );
+    }
   }
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Busca" />
+      <Header/>
+      
       <VStack flex={1} paddingX={8} paddingTop={8}>
 
-        { isLoading && (
-          <LoadingComponent/>
-        )}
+        { isLoading && !apiData.content.length && <LoadingComponent/> }
 
         <FlatList
-          data={data}
+          keyExtractor={({ id }) => String(id)}
+          data={apiData.content}
+          contentContainerStyle={{ paddingBottom: apiData.last ? 20 : 50 }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderHeaderList()}
           ListEmptyComponent={renderListEmpty()}
+          ListFooterComponent={renderLoader()}
+          onEndReached={loadMore}
           renderItem={({ item }) => (
             <ProductCard item={item} />
           )}
         />
+
       </VStack>
     </VStack>
   );

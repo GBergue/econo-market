@@ -78,12 +78,9 @@ export default function CategoryList() {
         <ScrollView showsVerticalScrollIndicator={false} mt={2} flex={1}>
         
         <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
-          {isLoading && (
-            <>
-            <Text>111</Text>
-            <LoadingComponent/>  
-            </>
-          )}
+        
+        {isLoading && (<LoadingComponent/>)}
+
         {
           categories.map((item, index) => renderCategoryComponent(index, item))
         }
