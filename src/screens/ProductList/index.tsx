@@ -16,12 +16,14 @@ import ProductCard from "../../components/ProductCard";
 import { Product } from "src/model/product";
 
 import useApi from "../../hooks/useApi";
+import ModalEditProduct from "../../components/ModalEditProduct";
 
 
 const SEGUNDO = 1000;
 
 export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
+  const [showEditModal, setShowEditModal] = useState(0);
   const idTimeout = useRef<NodeJS.Timeout | number>();
   const {
     apiData,
@@ -30,7 +32,6 @@ export default function ProductList({ navigation }) {
     loadMore,
     resetState,
   } = useApi<Product>({ url: '/search/product/name' });
-
 
   function handleSearch(text: string) {
     resetState();
@@ -75,7 +76,6 @@ export default function ProductList({ navigation }) {
     );
   }
 
-
   function renderListEmpty() {
     if (isLoading) return null;
 
@@ -89,6 +89,12 @@ export default function ProductList({ navigation }) {
   return (
     <VStack bg="gray.100" flex={1}>
       <Header/>
+
+      <ModalEditProduct
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+      />
+
       <VStack flex={1} paddingX={8}>
         <Input
           placeholder="Digite o produto"
@@ -119,7 +125,11 @@ export default function ProductList({ navigation }) {
           onEndReached={handleLoadMore}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <ProductCard navigation={navigation} item={item}/>
+            <ProductCard
+              navigation={navigation}
+              item={item}
+              setShowEditModal={setShowEditModal}
+            />
           )}
         />
       </VStack>

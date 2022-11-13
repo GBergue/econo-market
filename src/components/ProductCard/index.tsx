@@ -8,17 +8,18 @@ import { Feather, AntDesign } from '@expo/vector-icons';
 interface Props {
     item: Product,
     navigation: any,
+    setShowEditModal: (id: number) => void,
 }
 
 
-export default function ProductCard({ item, navigation } : Props) {
+export default function ProductCard({ item, navigation, setShowEditModal } : Props) {
 
   function handleAddCart() {
 
   }
 
   function handleEdit() {
-    //navigation.navigate('')
+    setShowEditModal(item.id);
   }
 
 
