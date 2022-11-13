@@ -6,6 +6,8 @@ import {
   ScrollView,
   Stack,
   Center,
+  Fab,
+  Icon,
 } from "native-base";
 import { Alert, View } from "react-native";
 
@@ -23,26 +25,34 @@ import { Pagination } from "src/model/pagination";
 import { Product } from "src/model/product";
 
 import AuthContext from "../../context/AuthContext";
+import { AntDesign } from '@expo/vector-icons'
+import ModalAddList from "./components/ModalAddList";
+import { ShoppingList as ShoppingListType } from "src/model/shopping";
 
 
 export default function ShoppingList() {
-  const [categories, setCategories] = useState<CategoryDTO[]>([]);
+  const [showModal, setShowModal] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [apiData, setData] = useState<ShoppingListType[]>();
   const navigation = useNavigation();
   const { getUserId } = useContext(AuthContext);
  
   useEffect(() => {
-    setLoading(true);
+    getList();
+  }, [showModal]);
 
-    api.get(`/shopping/user/${getUserId()}`)
+  function getList() {
+    setLoading(true);
+    api.get<ShoppingListType[]>(`/shopping/user/${getUserId()}`)
       .then(({ data }) => {
         console.log(data);
+        setData(data);
       })
       .catch(err => {
         console.log(err);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }
 
 
   return (
@@ -55,6 +65,21 @@ export default function ShoppingList() {
           Lista de compras
         </Heading>
 
+        {/* <FlatList/> */}
+
+        <ModalAddList
+          userId={getUserId()}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+
+        <Fab
+          renderInPortal={false}
+          shadow={2}
+          size="sm"
+          onPress={() => setShowModal(true)}
+          icon={<Icon color="white" as={AntDesign} name="plus" size="sm" />}
+        />
       </VStack>
     </VStack>
   );

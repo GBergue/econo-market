@@ -9,6 +9,7 @@ export declare global {
       main: undefined;
       categoryList: undefined;
       searchProductByCategory: { categoryId: number };
+      registerLocation: undefined;
     }
   }
 }

@@ -1,43 +1,57 @@
 import React, { useRef, useState } from "react";
+import { ActivityIndicator} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from "../../theme/theme";
 import {
   VStack,
   FlatList,
   Icon,
+  Center,
 } from "native-base";
 
 import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
-import ProductCard from "./components/productCard";
-import api from "../../api";
-import { Pagination } from "src/model/pagination";
+import ProductCard from "../../components/ProductCard";
+
 import { Product } from "src/model/product";
+
+import useApi from "../../hooks/useApi";
 
 
 const SEGUNDO = 1000;
 
-export default function ProductList() {
+export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<Pagination<Product>>({ content: [] });
-  const idTimeout = useRef<NodeJS.Timeout>();
+  const idTimeout = useRef<NodeJS.Timeout | number>();
+  const {
+    apiData,
+    getApiData,
+    isLoading,
+    loadMore,
+    resetState,
+  } = useApi<Product>({ url: '/search/product/name' });
 
 
   function handleSearch(text: string) {
-    setLoading(true);
-    api.get(`/search/product/name?name=${text}`)
-      .then(({ data }) => {
-        setData(data);
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => setLoading(false));
+    resetState();
+    getApiData(0, `name=${text}`);
   }
 
+  function handleLoadMore() {
+    loadMore(`name=${search}`);
+  }
+
+  function renderLoader() {
+    if (isLoading && apiData.content.length) {
+      return (
+        <Center>
+          <ActivityIndicator
+            size={"large"}
+          />
+        </Center>
+      );
+    }
+  }
 
   function onChange(text: string) {
     if (text) {
@@ -52,11 +66,11 @@ export default function ProductList() {
   }
 
   function renderHeaderList() {
-    if (isLoading || !data.content.length) return null;
+    if (isLoading || !apiData.totalElements) return null;
 
     return (
       <Text fontSize="md" color="gray.400" mb={4}>
-        {`${data.content.length} ${data.content.length > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
+        {`${apiData.totalElements} ${apiData.totalElements > 1 ? 'resultados encontrados' : 'resultado encontrado'}`}
       </Text>
     );
   }
@@ -84,9 +98,6 @@ export default function ProductList() {
           my={4}
           value={search}
           onChangeText={onChange}
-          onEndEditing={() => console.log('onEndEditing')}
-          onTouchEndCapture={() => console.log('onTouchEndCapture')}
-          onBlur={() => console.log('onBLur')}
           InputLeftElement={
             <Icon
             name="ios-search"
@@ -99,12 +110,16 @@ export default function ProductList() {
         />
 
         <FlatList
-          data={data.content}
+          data={apiData.content}
+          contentContainerStyle={{ paddingBottom: apiData.last ? 20 : 50 }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderHeaderList()}
           ListEmptyComponent={renderListEmpty()}
+          ListFooterComponent={renderLoader()}
+          onEndReached={handleLoadMore}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <ProductCard item={item}/>
+            <ProductCard navigation={navigation} item={item}/>
           )}
         />
       </VStack>

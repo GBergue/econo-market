@@ -3,5 +3,6 @@ import { Product } from "./product";
 export type ShoppingList = {
   id: number,
   uuid: string,
+  name: string,
   productList: Product[],
 }

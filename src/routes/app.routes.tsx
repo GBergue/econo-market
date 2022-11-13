@@ -10,6 +10,7 @@ import CategoryList from "../screens/CategoryList";
 import ShoppingList from "../screens/ShoppingList";
 import RegisterProduct from "../screens/RegisterProduct";
 import SearchProductByCategory from "../screens/SearchProductByCategory";
+import RegisterLocation from "../screens/RegisterLocation";
 
 import { theme } from "../theme/theme";
 
@@ -80,6 +81,12 @@ export function AppRoutes() {
           component={SearchProductByCategory}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="registerLocation"
+          component={RegisterLocation}
+          options={{ headerShown: false }}
+        />
+        
       </Stack.Navigator>
   );
 }

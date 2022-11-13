@@ -1,10 +1,14 @@
 import React, { useRef, useState } from 'react';
+import { FlatList } from 'react-native';
 import { Input as NBInput, IInputProps, Pressable, Modal } from 'native-base';
-import api from '../../api';
+
 import { Pagination } from 'src/model/pagination';
-import { FlatList, StyleSheet } from 'react-native';
+
+import api from '../../api';
+
 import Text from '../Text';
 import Button from '../Button';
+
 
 const SEGUNDO = 1000;
 
@@ -29,7 +33,6 @@ export default function Autocomplete<T>(props: Props) {
             .then(({ data }) => {
                 console.log(data);
                 setData(data);
-                //Keyboard.dismiss();
             })
             .catch(err => console.log(err))
             .finally(() => setLoading(false));
@@ -93,61 +96,59 @@ export default function Autocomplete<T>(props: Props) {
         );
     }
 
-    if (!showModal) {
-        return renderInput();
-    }
-
-
     return (
-        <Modal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            size="lg"    
-        >
-            <Modal.Content
-                bg="white"
-                maxWidth="350"
+        <>
+            { renderInput() }
+
+            <Modal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                size="lg"    
             >
-                <Modal.CloseButton  />
-                
-                <Modal.Body>
-
-                    { renderInput() }
-
-                    <FlatList
-                        style={{ backgroundColor: 'white' }}
-                        data={data ? data.content : null}
-                        renderItem={({ item }) => (
-                            <Pressable py={1} onPress={() => handleSelectValue(item)}>
-                                <Text marginLeft={2} color={item.id === selected?.id ? "primary.400" : "gray.700"}>
-                                    {item.brandName}
-                                </Text>
-                            </Pressable>
-                        )}
-                        ListFooterComponent={(
-                            <Button
-                                mt={2}
-                                onPress={handleSave}
-                            >
-                                Salvar
-                            </Button>
-                        )}
-                    />
+                <Modal.Content
+                    bg="white"
+                    maxWidth="350"
+                >
+                    <Modal.CloseButton/>
+                    <Modal.Header
+                        _text={{ color: "gray.400" }}
+                        borderColor="white"
+                        backgroundColor="white"
+                    >
+                        Digite a marca
+                    </Modal.Header>
                     
-                </Modal.Body>
+                    <Modal.Body>
+                        { renderInput() }
 
-            </Modal.Content>
-        </Modal>
+                        <FlatList
+                            style={{ backgroundColor: 'white' }}
+                            data={data ? data.content : null}
+                            renderItem={({ item }) => (
+                                <Pressable py={1} onPress={() => handleSelectValue(item)}>
+                                    <Text marginLeft={2} color={item.id === selected?.id ? "primary.400" : "gray.700"}>
+                                        {item.brandName}
+                                    </Text>
+                                </Pressable>
+                            )}
+                        />
+                    </Modal.Body>
+                    <Modal.Footer
+                        bg="white"
+                        borderColor="white"
+                    >
+                        <Button
+                            isLoading={isLoading}
+                            w="100%"
+                            mt={2}
+                            onPress={handleSave}
+                        >
+                            Salvar
+                        </Button>
+                    </Modal.Footer>
+
+                </Modal.Content>
+            </Modal>
+        </>
     );
 }
-
-const styles = StyleSheet.create({
-    autocompleteContainer: {
-      flex: 1,
-      left: 0,
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      zIndex: 1
-    }
-  });

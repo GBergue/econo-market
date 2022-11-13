@@ -65,9 +65,13 @@ export default function SearchProductByCategory({ route }) {
     }
   }
 
+  function handleLoadMore() {
+    loadMore();
+  }
+
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header/>
+      <Header allowGoBack/>
       
       <VStack flex={1} paddingX={8} paddingTop={8}>
 
@@ -81,7 +85,7 @@ export default function SearchProductByCategory({ route }) {
           ListHeaderComponent={renderHeaderList()}
           ListEmptyComponent={renderListEmpty()}
           ListFooterComponent={renderLoader()}
-          onEndReached={loadMore}
+          onEndReached={handleLoadMore}
           renderItem={({ item }) => (
             <ProductCard item={item} />
           )}

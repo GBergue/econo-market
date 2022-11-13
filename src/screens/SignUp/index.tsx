@@ -84,7 +84,8 @@ export default function SignUp() {
   return (
     <ScrollView
       bg="gray.200"
-      padding={50}
+      mt={12}
+      paddingX={8}
       flex={1}
     >
       <KeyboardAvoidingView>

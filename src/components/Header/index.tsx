@@ -3,17 +3,12 @@ import {
   HStack,
   Icon,
   VStack,
-  Popover,
-  Box,
-  Button,
   Pressable,
-  useContrastText,
   Menu,
-  HamburgerIcon,
- } from 'native-base';
- import { Feather } from '@expo/vector-icons';
-
-import LogoWhite from '@assets/logo_white.svg';
+  IconButton,
+} from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+ import { AntDesign, Feather } from '@expo/vector-icons';
 
 import Text from '../Text';
 
@@ -23,8 +18,10 @@ import AuthContext from '../../context/AuthContext';
 import Heading from '../Heading';
 
 
-export default function Header () {
+export default function Header ({ allowGoBack = false }) {
   const { setAuthenticated } = useContext(AuthContext);
+  const navigation = useNavigation();
+  const canGoBack = navigation.canGoBack();
 
   function handleLogout() {
     api.post('/auth/logout')
@@ -50,37 +47,17 @@ export default function Header () {
         justifyContent="space-between"
         alignItems="center"
       >
-        {/* <LogoWhite
-          height={75}
-          width={75}
-        /> */}
+        {
+          allowGoBack && canGoBack && (
+            <IconButton
+              onPress={() => navigation.goBack()}
+              icon={<AntDesign name="arrowleft" size={24} color="white" />}
+            />
+          )
+        }
+        
+
         <Heading color="white">EconoMarket</Heading>
-
-        {/* <Popover
-          placement='bottom'
-          trigger={triggerProps => {
-            return (
-              <Pressable {...triggerProps}>
-                <Icon
-                  as={Feather}
-                  name="menu"
-                  color="white"
-                  size={8}
-                />
-              </Pressable>
-            )
-          }}>
-        <Popover.Content accessibilityLabel="Actions">
-          <Popover.Arrow />
-
-          <Popover.Body>
-            <Pressable onPress={handleLogout}>
-              <Text>Log out</Text>
-            </Pressable>
-          </Popover.Body>
-        </Popover.Content>
-      </Popover> */}
-
       
         <Menu
           offset={70}
@@ -103,9 +80,6 @@ export default function Header () {
             </Pressable>
           </Menu.Item>
         </Menu>
-      
-
-        
       </HStack>
     </VStack>
   );
