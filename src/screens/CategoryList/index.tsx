@@ -3,6 +3,7 @@ import {
   VStack,
   ScrollView,
   Stack,
+  Image,
 } from "native-base";
 import { Alert, View } from "react-native";
 
@@ -12,6 +13,7 @@ import Header from "../../components/Header";
 import Heading from "../../components/Heading";
 
 import { CategoryDTO } from "../../model/category";
+import { getImageSource } from "../../helper/category";
 
 import api from "../../api";
 import { LoadingComponent } from "./components/LoadingCategory";
@@ -25,6 +27,7 @@ export default function CategoryList() {
 
 
   useEffect(() => {
+    
     setLoading(true);
     api.get<CategoryDTO[]>('/search/category')
       .then(({ data }) => {
@@ -36,6 +39,7 @@ export default function CategoryList() {
       })
       .finally(() => {
         setLoading(false);
+        //navigation.navigate('registerLocation');
       });
   }, []);
 
@@ -45,6 +49,8 @@ export default function CategoryList() {
   }
 
   function renderCategoryComponent(index: number, item: CategoryDTO) {
+    const imgSource = getImageSource(item.name);
+
     return (
       <Stack key={item.id} width="50%">
           <Card
@@ -59,6 +65,12 @@ export default function CategoryList() {
               alignItems="center"
               justifyContent="center"
           >
+              {!!imgSource && <Image
+                source={imgSource}
+                alt={item.name}
+                resizeMode="contain"
+                size="md"
+              />}
               <Text fontSize="md" color="gray.700">{item.name}</Text>
           </Card>
       </Stack>
