@@ -23,7 +23,7 @@ const SEGUNDO = 1000;
 
 export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
-  const [showEditModal, setShowEditModal] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(null);
   const idTimeout = useRef<NodeJS.Timeout | number>();
   const {
     apiData,
