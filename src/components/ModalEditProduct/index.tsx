@@ -9,12 +9,12 @@ import api from "../../api";
 import Text from "../Text";
 import Button from "../Button";
 import Input from "../Input";
-import { Product } from "src/model/product";
+import { Product, ProductDTO } from "src/model/product";
 
 
 type Props = {
-  showEditModal: Product;
-  setShowEditModal: (product: Product) => void;
+  showEditModal: ProductDTO;
+  setShowEditModal: (product: ProductDTO) => void;
 };
 
 export default function ModalEditProduct({
@@ -34,15 +34,43 @@ export default function ModalEditProduct({
   function handleEdit() {
     const {
       id,
+      name,
+      unity,
+      brand,
+      category,
+      market
     } = showEditModal;
-    // Toast.show({description: "vtnc"});
-    console.log({
-      id,
-      price
-    });
+
+    // console.log({
+    //   id,
+    //   name,
+    //   price,
+    //   unity,
+    //   brand: {
+    //     id: brand.id
+    //   },
+    //   category: {
+    //     id: category.id
+    //   },
+    //   markets: [{
+    //     id: market.id
+    //   }]
+    // });
+
     api.put("register/product", {
       id,
-      price
+      name,
+      price,
+      unity,
+      brand: {
+        id: brand.id
+      },
+      category: {
+        id: category.id
+      },
+      markets: [{
+        id: market.id
+      }]
     }).then(() => {
       Toast.show({
         description: "Preço editado com sucesso!",
@@ -56,7 +84,6 @@ export default function ModalEditProduct({
 
   function handleChange(text) {
     setPrice(text);
- 
   };
 
 
