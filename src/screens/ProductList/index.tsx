@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import { ActivityIndicator} from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import {
   VStack,
   FlatList,
   Icon,
   Center,
+  Stack,
 } from "native-base";
 
 import Text from "../../components/Text";
@@ -13,10 +14,11 @@ import Header from "../../components/Header";
 import Input from "../../components/Input";
 import ProductCard from "../../components/ProductCard";
 
-import { Product } from "src/model/product";
+import { ProductDTO } from "src/model/product";
 
 import useApi from "../../hooks/useApi";
 import ModalEditProduct from "../../components/ModalEditProduct";
+import ModalAddListProduct from "../../components/ModalAddListProduct";
 
 
 const SEGUNDO = 1000;
@@ -24,6 +26,7 @@ const SEGUNDO = 1000;
 export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
   const [showEditModal, setShowEditModal] = useState(null);
+  const [showAddCartModal, setShowAddCartModal] = useState(null);
   const idTimeout = useRef<NodeJS.Timeout | number>();
   const {
     apiData,
@@ -31,7 +34,7 @@ export default function ProductList({ navigation }) {
     isLoading,
     loadMore,
     resetState,
-  } = useApi<Product>({ url: '/search/product/name' });
+  } = useApi<ProductDTO>({ url: '/search/product/name' });
 
   function handleSearch(text: string) {
     resetState();
@@ -80,9 +83,18 @@ export default function ProductList({ navigation }) {
     if (isLoading) return null;
 
     return (
-      <Text fontSize="md" color="gray.400">
-        Não foi encontrado, tente novamente
-      </Text>
+      <Center flex={1}>
+        <Stack my={4}>
+          <FontAwesome5
+            name="shopping-basket"
+            size={48}
+            color="#a1a1aa"
+          />
+        </Stack>
+        <Text fontSize="md" color="gray.400">
+          Não foi encontrado nenhum item!
+        </Text>
+      </Center>
     );
   }
 
@@ -93,6 +105,11 @@ export default function ProductList({ navigation }) {
       <ModalEditProduct
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
+      />
+
+      <ModalAddListProduct
+        showModal={showAddCartModal}
+        setShow={setShowAddCartModal}
       />
 
       <VStack flex={1} paddingX={8}>
@@ -129,6 +146,7 @@ export default function ProductList({ navigation }) {
               navigation={navigation}
               item={item}
               setShowEditModal={setShowEditModal}
+              setShowAddCartModal={setShowAddCartModal}
             />
           )}
         />

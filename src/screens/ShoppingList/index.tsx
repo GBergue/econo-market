@@ -1,41 +1,27 @@
 import React, {useEffect, useState, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
 import {
   VStack,
   FlatList,
-  ScrollView,
-  Stack,
-  Center,
   Fab,
   Icon,
 } from "native-base";
-import { Alert, View } from "react-native";
+import { AntDesign } from '@expo/vector-icons'
 
-import Text from "../../components/Text";
-import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
-import Loading from "../..//components/Loading";
-
-import { CategoryDTO } from "../../model/category";
+import ModalAddList from "./components/ModalAddList";
+import { CardCart } from "./components/CardCart";
 
 import api from "../../api";
-//import { LoadingComponent } from "./components/LoadingCategory";
-import { Pagination } from "src/model/pagination";
-import { Product } from "src/model/product";
 
 import AuthContext from "../../context/AuthContext";
-import { AntDesign } from '@expo/vector-icons'
-import ModalAddList from "./components/ModalAddList";
 import { ShoppingList as ShoppingListType } from "src/model/shopping";
-import { CardCart } from "./components/CardCart";
 
 
 export default function ShoppingList() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [apiData, setData] = useState<ShoppingListType[]>();
-  const navigation = useNavigation();
   const { getUserId } = useContext(AuthContext);
  
   useEffect(() => {
