@@ -63,7 +63,7 @@ export default function CategoryList() {
               p={4}
               onPress={() => handleLoadCategory(item.id)}
               alignItems="center"
-              justifyContent="center"
+              justifyContent="space-evenly"
           >
               {!!imgSource && <Image
                 source={imgSource}
@@ -71,7 +71,7 @@ export default function CategoryList() {
                 resizeMode="contain"
                 size="md"
               />}
-              <Text fontSize="md" color="gray.700">{item.name}</Text>
+              <Text mt={1} fontSize="md" color="gray.700">{item.name}</Text>
           </Card>
       </Stack>
     );

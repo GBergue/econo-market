@@ -16,6 +16,9 @@ export default function ModalAddList({ userId, showModal, setShowModal }) {
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState('');
 
+  useEffect(() => {
+    if (showModal) setName('');
+  }, [showModal])
   
   function handleAdd() {
     if (!name) {

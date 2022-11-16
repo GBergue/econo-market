@@ -14,12 +14,37 @@ import Heading from "../../components/Heading";
 import Select from "../../components/Select";
 
 import api from "../../api";
+import * as Location from 'expo-location';
 
 
-export default function RegisterProduct() {
+export default function RegisterLocation() {
   const { navigate } = useNavigation();
-  const [location, setLocation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+  
+      if (status !== 'granted') {
+        setErrorMsg('Permissão para localização negada');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
 
   function handleSearch() {
       setIsLoading(true);
@@ -30,17 +55,20 @@ export default function RegisterProduct() {
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Cadastro" />
-      <ScrollView paddingX={8}>
-        <Heading marginY={8}>Informe sua localização</Heading>
+      <Header/>
 
+      <ScrollView paddingX={8}>
+        <Heading marginY={4}>Informe sua localização</Heading>
+      
         <Input
           placeholder="Digite o endereço"
           marginBottom={2}
           onChangeText={setLocation}
           value={location}
         />
-
+        
+        <Text color="black">{text}</Text>
+        
         <Button
           marginBottom={2}
           endIcon={<Feather name="log-in" size={16} color="white" />}

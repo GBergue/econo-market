@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { ActivityIndicator } from "react-native";
-import { theme } from "../../theme/theme";
+import { FontAwesome5 } from '@expo/vector-icons';
 import {
   VStack,
   FlatList,
   Center,
+  Stack,
+  Link,
 } from "native-base";
 
 import useApi from "../../hooks/useApi";
@@ -12,23 +14,22 @@ import useApi from "../../hooks/useApi";
 import Text from "../../components/Text";
 import Header from "../../components/Header";
 
-import { Product } from "src/model/product";
+import { ProductDTO } from "src/model/product";
 
-import ProductCard from "./components/ProductCard";
+import ProductCard from "../../components/ProductCard";
 import { LoadingComponent } from "./components/Loading";
 
 
 
-export default function SearchProductByCategory({ route }) {
+export default function SearchProductByCategory({ route, navigation }) {
   const { categoryId } = route.params;
   const {
     apiData,
     getApiData,
     isLoading,
     loadMore,
-  } = useApi<Product>({ url: `/search/product/category/${categoryId}` });
+  } = useApi<ProductDTO>({ url: `/search/product/category/${categoryId}` });
 
-  
   useEffect(() => {
     getApiData();
   }, []);
@@ -46,9 +47,24 @@ export default function SearchProductByCategory({ route }) {
   function renderListEmpty() {
     if (!isLoading) {
       return (
-        <Text fontSize="md" color="gray.400">
-          Não foi encontrado, tente novamente
-        </Text>
+        <Center flex={1}>
+          <Text fontSize="md" color="gray.400">
+            Não foi encontrado nenhum item!
+          </Text>
+          <Stack my={4}>
+            <FontAwesome5
+              name="shopping-basket"
+              size={48}
+              color="#a1a1aa"
+            />
+          </Stack>
+          <Link
+            onPress={() => navigation.goBack()}
+            _text={{ color: "blue.400"}}
+          >
+            Voltar para tela de categorias
+          </Link>
+        </Center>
       );
     }
   }
@@ -87,7 +103,11 @@ export default function SearchProductByCategory({ route }) {
           ListFooterComponent={renderLoader()}
           onEndReached={handleLoadMore}
           renderItem={({ item }) => (
-            <ProductCard item={item} />
+            <ProductCard
+              navigation={navigation}
+              setShowEditModal={(x) => {}}
+              item={item}
+            />
           )}
         />
 

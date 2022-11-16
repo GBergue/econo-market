@@ -23,10 +23,8 @@ import { UnityDTO } from "src/model/unity";
 
 export default function RegisterProduct() {
   const toast = useToast();
-  const { navigate } = useNavigation();
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [markets, setMarkets] = useState<MarketDTO[]>([]);
-  const [brands, setBrands] = useState<BrandDTO[]>([]);
   const [unities, setUnities] = useState<UnityDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModalBrands, setShowModalBrands] = useState(false);
@@ -53,10 +51,6 @@ export default function RegisterProduct() {
       const { content } = data;
       // console.log(content);
       setMarkets(content);
-    });
-    api.get<BrandDTO[]>("/search/brand").then(({ data }) => {
-      const { content } = data;
-      setBrands(content);
     });
     api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
       setUnities(data);
@@ -164,31 +158,13 @@ export default function RegisterProduct() {
       })
       .finally(() => setIsLoading(false));
     }
-    // console.log({
-    //   name,
-    //   price,
-    //   unity,
-    //   brand: {
-    //     id: brandid
-    //   },
-    //   category: {
-    //     id: categoryid,
-    //   },
-    //   markets: [
-    //     {
-    //       id: marketid,
-    //     },
-    //   ],
-    // });
-   
-
   }
 
   return (
     <VStack bg="gray.100" flex={1}>
-      <Header title="Cadastro" />
+      <Header/>
       <ScrollView paddingX={8}>
-        <Heading marginY={8}>Informe os dados do produto</Heading>
+        <Heading marginY={4}>Informe os dados do produto</Heading>
 
         <Controller
           control={control}

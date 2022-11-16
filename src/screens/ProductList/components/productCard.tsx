@@ -20,7 +20,6 @@ interface Props {
 
 export default function ProductCard({ item } : Props) {
 
-
   return (
     <Card bg="white" rounded="md" mb={2}>
         <VStack px={2}>
@@ -76,7 +75,7 @@ export default function ProductCard({ item } : Props) {
                     fontSize="md"
                     color="gray.800"
                 >
-                    {item.price}
+                    R$ {Number(item.price).toFixed(2).replace('.', ',')}
                 </Text>
             </HStack>
         </VStack>

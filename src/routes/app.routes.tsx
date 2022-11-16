@@ -2,9 +2,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons, AntDesign  } from '@expo/vector-icons'
 
-
-import Main from "../screens/Main";
-
 import ProductList from "../screens/ProductList";
 import CategoryList from "../screens/CategoryList";
 import ShoppingList from "../screens/ShoppingList";
@@ -40,8 +37,8 @@ function getTabIcon( route, focused: boolean, color: string, size: number ) {
 }
 
 function getTabBarLabel(route) {
-  if (route.name === 'categoryList') return "Home";
-  if (route.name === 'productList') return "Busca";  
+  if (route.name === 'categoryList') return "Início";
+  if (route.name === 'productList') return "Busca";
   if (route.name === 'registerProduct') return "Adicionar";
   if (route.name === 'shoppingList') return "Listas";
 }
@@ -59,6 +56,7 @@ export function AppRoutes() {
           tabBarInactiveTintColor: 'gray',
           tabBarLabel: getTabBarLabel(route),
           headerShown: false,
+          tabBarStyle: { paddingBottom: 5 }
         })}
       >
         <Tab.Screen name="categoryList" component={CategoryList} />

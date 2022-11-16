@@ -9,6 +9,7 @@ import {
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
  import { AntDesign, Feather } from '@expo/vector-icons';
+ import Constants from 'expo-constants';
 
 import Text from '../Text';
 
@@ -37,8 +38,8 @@ export default function Header ({ allowGoBack = false }) {
 
   return (
     <VStack
+      style={{ paddingTop: Constants.statusBarHeight }}
       bg="primary.500"
-      pt={8}
       pb={4}
       px={4}
     >
@@ -55,12 +56,11 @@ export default function Header ({ allowGoBack = false }) {
             />
           )
         }
-        
 
         <Heading color="white">EconoMarket</Heading>
-      
+
         <Menu
-          offset={70}
+          offset={30}
           shouldOverlapWithTrigger={false}
           placement="bottom right"
           trigger={triggerProps => (

@@ -88,10 +88,7 @@ export default function Login() {
       mt={12}
       flex={1}
     >
-
       <KeyboardAvoidingView>
-        {isLoading && <Loading/>}
-
         <Center>
           <LogoAzul height={200} width={200} />
         </Center>

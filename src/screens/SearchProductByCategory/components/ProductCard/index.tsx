@@ -14,6 +14,7 @@ interface Props {
 
 export default function ProductCard({ item } : Props) {
     const {
+        id,
         name,
         brand,
         market,

@@ -28,6 +28,7 @@ import AuthContext from "../../context/AuthContext";
 import { AntDesign } from '@expo/vector-icons'
 import ModalAddList from "./components/ModalAddList";
 import { ShoppingList as ShoppingListType } from "src/model/shopping";
+import { CardCart } from "./components/CardCart";
 
 
 export default function ShoppingList() {
@@ -58,14 +59,18 @@ export default function ShoppingList() {
   return (
     <VStack bg="gray.100" flex={1}>
       <Header />
-
       <VStack flex={1} paddingX={8}>
-        
         <Heading my={4}>
           Lista de compras
         </Heading>
 
-        {/* <FlatList/> */}
+        <FlatList
+          refreshing={isLoading}
+          onRefresh={getList}
+          data={apiData}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <CardCart item={item} setLoading={setLoading} getList={getList}/>}
+        />
 
         <ModalAddList
           userId={getUserId()}
