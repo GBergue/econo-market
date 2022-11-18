@@ -30,6 +30,7 @@ export default function ModalEditProduct({
     }
   }, [showEditModal]);
   
+  const [errorMsg, setErrorMsg] = useState('');
   
   function handleEdit() {
     const {
@@ -56,6 +57,27 @@ export default function ModalEditProduct({
     //     id: market.id
     //   }]
     // });
+    // if(!validate(price)){
+    //   Toast.show({
+    //     description: "Apenas números e ponto final"
+    //   });
+    //   return;
+    // }
+    if(Number(price) === showEditModal.price){
+      // Toast.show({
+      //   description: "Apenas números e ponto final!"
+      // });
+      setErrorMsg('Informe um preço diferente!');
+      return;
+    }
+
+    if(!price.match("^[0-9.]+$")){
+      // Toast.show({
+      //   description: "Apenas números e ponto final!"
+      // });
+      setErrorMsg('Apenas números e ponto final!');
+      return;
+    }
 
     api.put("register/product", {
       id,
@@ -75,6 +97,7 @@ export default function ModalEditProduct({
       Toast.show({
         description: "Preço editado com sucesso!",
       });
+      setShowEditModal(null);
     })
     .catch((err) => {
       Alert.alert('', 'Não foi possível atualizar o preço, tente novamente!');
@@ -85,6 +108,11 @@ export default function ModalEditProduct({
   function handleChange(text) {
     setPrice(text);
   };
+
+  function validate(value: string) {
+    const matches = value.match("^[0-9.]+$");
+    return matches?.length > 0 || "Apenas números e ponto final";
+  }
 
 
   return (
@@ -114,6 +142,7 @@ export default function ModalEditProduct({
             value={price}
             keyboardType="numeric"
           />
+            {!!errorMsg && <Text mt={2} color="error.500">{errorMsg}</Text>}
         </Modal.Body>
         <Modal.Footer bg="white" borderColor="gray.200">
           <Button onPress={handleEdit} w="100%" mt={2}>
