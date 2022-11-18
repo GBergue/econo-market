@@ -23,13 +23,18 @@ import AuthContext from '../../context/AuthContext';
 import jwtDecode from 'jwt-decode';
 import { TokenInfo } from 'src/model/token';
 
+type FormValues = {
+  email: string;
+  password: string;
+};
+
 
 export default function Login() {
   const { navigate } = useNavigation();
   const { setAuthenticated } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       email: __DEV__ ? 'manager@manager.com' : '',
       password: __DEV__ ? '@manager' : '',
@@ -58,12 +63,11 @@ export default function Login() {
   }
 
 
-  function onSubmit({ email, password }) {
+  function onSubmit({ email, password }: FormValues) {
     setIsLoading(true);
-
     api.post('/auth/login', {
-      email,
-      password,
+      email: email.trim(),
+      password: password.trim(),
     })
       .then(({ data }) => {
         const { access_token } = data;

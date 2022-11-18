@@ -1,10 +1,14 @@
-import React from "react";
-import { HStack, Pressable, VStack } from "native-base";
-import Text from "../../../../components/Text";
-import { ShoppingList as ShoppingListType } from "src/model/shopping";
-import { Feather } from '@expo/vector-icons';
-import api from "../../../../api";
+import React, { useState } from "react";
 import { Alert } from "react-native";
+import { FlatList, HStack, Icon, IconButton, Pressable, VStack } from "native-base";
+import { Feather, AntDesign } from '@expo/vector-icons';
+
+import { ShoppingList as ShoppingListType } from "src/model/shopping";
+
+import Text from "../../../../components/Text";
+import api from "../../../../api";
+import { CardProduct } from "../CardProductList";
+
 
 type Props = {
   item: ShoppingListType,
@@ -13,6 +17,7 @@ type Props = {
 };
 
 export function CardCart({ item, setLoading, getList }: Props) {
+  const [expanded, setExpanded] = useState(false);
 
   function handleDelete() {
     Alert.alert('', 'Deseja mesmo deletar?', 
@@ -37,7 +42,7 @@ export function CardCart({ item, setLoading, getList }: Props) {
   const qtdProdutos = item.productList.length;
 
   return (
-    <VStack rounded="md" bg="white" w="100%" px={2} py={4} mb={2}>
+    <VStack rounded="md" bg="white" w="100%" px={2} py={2} mb={2}>
       <HStack justifyContent="space-between">
         <Text fontWeight="bold" color="gray.700">
           {item.name}
@@ -46,11 +51,28 @@ export function CardCart({ item, setLoading, getList }: Props) {
           <Feather name="trash" size={18} color="red" />
         </Pressable>
       </HStack>
+
+      {expanded && (
+        <FlatList
+          data={item.productList}
+          renderItem={({ item }) => <CardProduct item={item}/>}
+        />
+      )}
       
       {!!qtdProdutos && (
-        <Text color="gray.400">
-          {qtdProdutos}
-        </Text>
+        <Pressable
+          onPress={() => setExpanded(x => !x)}
+          w="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Icon
+            as={AntDesign}
+            name={expanded ? "up" : "down"}
+            color="gray.700"
+            size="md"
+          />
+        </Pressable>
       )}
     </VStack>
   );

@@ -23,18 +23,17 @@ export default function useApi<T>({ url }: UseApiProps) {
   const [ apiData, setApiData ] = useState<Pagination<T>>(DEFAULT_VALUE);
   const [ isLoading, setLoading ] = useState(false);
 
-  function resetState() {
-    setApiData(DEFAULT_VALUE);
-  }
 
-  function getApiData(pageNumber = 0, params = '') {
+  function getApiData(pageNumber = 0, params = '', reset = false) {
+    console.log('getApiData')
     setLoading(true);
     api.get<Pagination<T>>(`${url}?page=${pageNumber}&${params}`)
       .then(({ data }) => {
-        setApiData({
-          ...data,
-          content: [...apiData.content, ...data.content]
-        });
+        setApiData(reset ? data : {
+            ...data,
+            content: [...apiData.content, ...data.content]
+          }
+        );
       })
       .catch(err => console.log(err))
       .finally(() => setLoading(false));
@@ -53,6 +52,5 @@ export default function useApi<T>({ url }: UseApiProps) {
     isLoading,
     getApiData,
     loadMore,
-    resetState,
   };
 }

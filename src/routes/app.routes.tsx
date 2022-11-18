@@ -51,12 +51,13 @@ export function AppRoutes() {
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
+          tabBarHideOnKeyboard: true,
           tabBarIcon: ({ focused, color, size }) => getTabIcon( route, focused, color, size ),
           tabBarActiveTintColor,
           tabBarInactiveTintColor: 'gray',
           tabBarLabel: getTabBarLabel(route),
           headerShown: false,
-          tabBarStyle: { paddingBottom: 5 }
+          tabBarStyle: { paddingVertical: 5 }
         })}
       >
         <Tab.Screen name="categoryList" component={CategoryList} />

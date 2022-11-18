@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ActivityIndicator } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import {
@@ -13,15 +13,25 @@ import useApi from "../../hooks/useApi";
 
 import Text from "../../components/Text";
 import Header from "../../components/Header";
+import ModalAddListProduct from "../../components/ModalAddListProduct";
+import ModalEditProduct from "../../components/ModalEditProduct";
+
+import AuthContext from "../../context/AuthContext";
 
 import { ProductDTO } from "src/model/product";
+import { ShoppingList } from "src/model/shopping";
 
 import ProductCard from "../../components/ProductCard";
 import { LoadingComponent } from "./components/Loading";
 
+import api from "../../api";
 
 
 export default function SearchProductByCategory({ route, navigation }) {
+  const [showEditModal, setShowEditModal] = useState(null);
+  const [showAddCartModal, setShowAddCartModal] = useState(null);
+  const [shoppingLists, setShoppingLists] = useState(null);
+  const { getUserId } = useContext(AuthContext);
   const { categoryId } = route.params;
   const {
     apiData,
@@ -33,6 +43,16 @@ export default function SearchProductByCategory({ route, navigation }) {
   useEffect(() => {
     getApiData();
   }, []);
+
+  useEffect(() => {
+    getList();
+  }, [showAddCartModal]);
+
+  function getList() {
+    api.get<ShoppingList[]>(`/shopping/user/${getUserId()}`)
+      .then(({ data }) => setShoppingLists(data))
+      .catch(err => console.log(err));
+  }
 
   function renderHeaderList() {
     if (!apiData || !apiData.content.length) return null;
@@ -47,7 +67,7 @@ export default function SearchProductByCategory({ route, navigation }) {
   function renderListEmpty() {
     if (!isLoading) {
       return (
-        <Center flex={1}>
+        <Stack flex={1} justifyContent="center" alignItems="center">
           <Text fontSize="md" color="gray.400">
             Não foi encontrado nenhum item!
           </Text>
@@ -64,7 +84,7 @@ export default function SearchProductByCategory({ route, navigation }) {
           >
             Voltar para tela de categorias
           </Link>
-        </Center>
+        </Stack>
       );
     }
   }
@@ -88,6 +108,18 @@ export default function SearchProductByCategory({ route, navigation }) {
   return (
     <VStack bg="gray.100" flex={1}>
       <Header allowGoBack/>
+
+      <ModalEditProduct
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+      />
+
+      <ModalAddListProduct
+        showModal={showAddCartModal}
+        setShow={setShowAddCartModal}
+        shoppingLists={shoppingLists}
+        userId={getUserId()}
+      />
       
       <VStack flex={1} paddingX={8} paddingTop={8}>
 
@@ -105,7 +137,8 @@ export default function SearchProductByCategory({ route, navigation }) {
           renderItem={({ item }) => (
             <ProductCard
               navigation={navigation}
-              setShowEditModal={(x) => {}}
+              setShowEditModal={setShowEditModal}
+              setShowAddCartModal={setShowAddCartModal}
               item={item}
             />
           )}

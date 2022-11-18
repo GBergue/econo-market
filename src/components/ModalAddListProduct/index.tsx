@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Pressable, Modal, Select as NBSelect, Stack } from "native-base";
+import { Pressable, Modal, Select as NBSelect, Stack, useToast } from "native-base";
 
 import api from "../../api";
 
@@ -10,41 +10,76 @@ import { ProductDTO } from "src/model/product";
 import { ShoppingList as ShoppingListType } from "src/model/shopping";
 import AuthContext from "../../context/AuthContext";
 import Counter from "../Counter";
+import ShoppingList from "src/screens/ShoppingList";
+import { Alert } from "react-native";
 
 
 type Props = {
+  userId: number;
   showModal: ProductDTO;
   setShow: (product: ProductDTO) => void;
+  shoppingLists: ShoppingListType[];
 };
 
 export default function ModalAddListProduct({
+  userId,
   showModal,
   setShow,
+  shoppingLists,
 }: Props) {
-  const [lists, setList] = useState<ShoppingListType[]>([]);
-  const [selectedList, setSelectedList] = useState();
-  const [quantity, setQuantity] = useState();
+  const [selectedList, setSelectedList] = useState<string>();
+  const [quantity, setQuantity] = useState('0');
+  const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
-  const { getUserId } = useContext(AuthContext);
+  const toast = useToast();
 
   useEffect(() => {
-    getList();
+    setQuantity('0');
+    setErrorMsg('');
+    setSelectedList(null);
+    console.log('reset');
   }, [showModal]);
 
-  function getList() {
+  function handleAdd() {
+    if (!quantity) {
+      setErrorMsg('Quantidade inválida!');
+      return;
+    }
+    if (!selectedList) {
+      setErrorMsg('Selecione a lista!');
+      return;
+    }
+    
+    let productList = [];
+    const shoppingListSelected = shoppingLists.find((item) => item.id === Number(selectedList));
+    
+    if (shoppingListSelected.productList) {
+      productList = shoppingListSelected.productList
+    }
+    productList.push({
+      product: showModal,
+      quantity: Number(quantity),
+    });
+
     setLoading(true);
-    api.get<ShoppingListType[]>(`/shopping/user/${getUserId()}`)
-      .then(({ data }) => {
-        setList(data);
+    api.put('/shopping', {
+      ...shoppingListSelected,
+      productList,
+      user: {
+        id: userId,
+      }
+    })
+      .then(() => {
+        toast.show({
+          description: "Adicionado com sucesso!",
+        });
+        setShow(null);
       })
       .catch(err => {
-        console.log(err);
+        Alert.alert('', 'Falha ao adicionar produto na lista.');
+        console.log(err)
       })
       .finally(() => setLoading(false));
-  }
-  
-  function handleAdd() {
-
   }
 
   return (
@@ -65,15 +100,19 @@ export default function ModalAddListProduct({
         {!!showModal && (
           <Modal.Body backgroundColor="white">
             <Text
-              fontWeight="bold"
               fontSize="md"
               color="gray.700"
-              mb={4}
             >
-              {showModal.name} {showModal.price} {showModal.unity}
+              {showModal.name}
             </Text>
+            <Text fontWeight="bold" color="gray.700" fontSize="md">
+              {' R$ '}{showModal.price.toFixed(2).replace('.',',')}
+              <Text color="gray.400">{' '}{showModal.unity}</Text>              
+            </Text>
+
             <Stack mb={4} justifyContent="center" alignItems="center">
-              <Counter/>
+            <Text color="gray.400">Quantidade</Text>
+              <Counter quantity={quantity} setQuantity={setQuantity}/>
             </Stack>
             <Select
               accessibilityLabel="Lista de compra"
@@ -84,7 +123,7 @@ export default function ModalAddListProduct({
                 bg: "primary.400",
               }}
             >
-              {lists.map(({ name, id }) => (
+              {shoppingLists.map(({ name, id }) => (
                 <NBSelect.Item
                   key={id}
                   label={name}
@@ -92,10 +131,11 @@ export default function ModalAddListProduct({
                 ></NBSelect.Item>
               ))}
             </Select>
+            {!!errorMsg && <Text mt={2} color="error.500">{errorMsg}</Text>}
           </Modal.Body>
         )}
         <Modal.Footer bg="white" borderColor="gray.200">
-          <Button onPress={handleAdd} w="100%" mt={2}>
+          <Button isLoading={loading} onPress={handleAdd} w="100%" mt={2}>
             Adicionar
           </Button>
         </Modal.Footer>

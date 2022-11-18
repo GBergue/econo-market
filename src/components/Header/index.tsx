@@ -12,11 +12,11 @@ import { useNavigation } from '@react-navigation/native';
  import Constants from 'expo-constants';
 
 import Text from '../Text';
+import Heading from '../Heading';
 
 import api, { clearAuthorization } from '../../api';
 
 import AuthContext from '../../context/AuthContext';
-import Heading from '../Heading';
 
 
 export default function Header ({ allowGoBack = false }) {

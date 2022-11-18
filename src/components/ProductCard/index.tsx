@@ -37,6 +37,8 @@ export default function ProductCard({ item, navigation, setShowEditModal, setSho
                     fontFamily="body"
                     fontSize="md"
                     color="gray.800"
+                    numberOfLines={2}
+                    flex={1}
                 >
                     {item.name}
                     {showBrand && (

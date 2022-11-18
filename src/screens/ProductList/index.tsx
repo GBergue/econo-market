@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { ActivityIndicator} from "react-native";
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import {
@@ -15,11 +15,13 @@ import Input from "../../components/Input";
 import ProductCard from "../../components/ProductCard";
 
 import { ProductDTO } from "src/model/product";
+import { ShoppingList as ShoppingListType } from "src/model/shopping";
 
 import useApi from "../../hooks/useApi";
 import ModalEditProduct from "../../components/ModalEditProduct";
 import ModalAddListProduct from "../../components/ModalAddListProduct";
-
+import AuthContext from "../../context/AuthContext";
+import api from "../../api";
 
 const SEGUNDO = 1000;
 
@@ -27,18 +29,28 @@ export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
   const [showEditModal, setShowEditModal] = useState(null);
   const [showAddCartModal, setShowAddCartModal] = useState(null);
+  const [shoppingLists, setShoppingLists] = useState(null);
+  const { getUserId } = useContext(AuthContext);
   const idTimeout = useRef<NodeJS.Timeout | number>();
   const {
     apiData,
     getApiData,
     isLoading,
     loadMore,
-    resetState,
   } = useApi<ProductDTO>({ url: '/search/product/name' });
 
+  useEffect(() => {
+    getList();
+  }, [showAddCartModal]);
+
+  function getList() {
+    api.get<ShoppingListType[]>(`/shopping/user/${getUserId()}`)
+      .then(({ data }) => setShoppingLists(data))
+      .catch(err => console.log(err));
+  }
+
   function handleSearch(text: string) {
-    resetState();
-    getApiData(0, `name=${text}`);
+    getApiData(0, `name=${text}`, true);
   }
 
   function handleLoadMore() {
@@ -83,18 +95,16 @@ export default function ProductList({ navigation }) {
     if (isLoading) return null;
 
     return (
-      <Center flex={1}>
-        <Stack my={4}>
-          <FontAwesome5
-            name="shopping-basket"
-            size={48}
-            color="#a1a1aa"
-          />
-        </Stack>
-        <Text fontSize="md" color="gray.400">
+      <Stack my={4} justifyContent="center" flex={1} alignItems="center">
+        <FontAwesome5
+          name="shopping-basket"
+          size={48}
+          color="#a1a1aa"
+        />
+        <Text mt={4} fontSize="md" color="gray.400">
           Não foi encontrado nenhum item!
         </Text>
-      </Center>
+      </Stack>
     );
   }
 
@@ -110,6 +120,8 @@ export default function ProductList({ navigation }) {
       <ModalAddListProduct
         showModal={showAddCartModal}
         setShow={setShowAddCartModal}
+        shoppingLists={shoppingLists}
+        userId={getUserId()}
       />
 
       <VStack flex={1} paddingX={8}>
@@ -143,8 +155,8 @@ export default function ProductList({ navigation }) {
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <ProductCard
-              navigation={navigation}
               item={item}
+              navigation={navigation}
               setShowEditModal={setShowEditModal}
               setShowAddCartModal={setShowAddCartModal}
             />
