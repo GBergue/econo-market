@@ -30,6 +30,7 @@ export default function RegisterProduct() {
   const [showModalBrands, setShowModalBrands] = useState(false);
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -113,6 +114,7 @@ export default function RegisterProduct() {
             }],
           })
           .then(() => {
+            reset();
             toast.show({
               description: "Produto adicionado com sucesso!",
             });
@@ -148,6 +150,7 @@ export default function RegisterProduct() {
         }],
       })
       .then(() => {
+        reset();
         toast.show({
           description: "Produto adicionado com sucesso!",
         });
