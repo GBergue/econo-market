@@ -17,21 +17,20 @@ import ModalAddListProduct from "../../components/ModalAddListProduct";
 import ModalEditProduct from "../../components/ModalEditProduct";
 
 import AuthContext from "../../context/AuthContext";
+import ShoppingListContext  from "../../context/ShoppingListContext";
 
 import { ProductDTO } from "src/model/product";
-import { ShoppingList } from "src/model/shopping";
 
 import ProductCard from "../../components/ProductCard";
 import { LoadingComponent } from "./components/Loading";
 
-import api from "../../api";
 
 
 export default function SearchProductByCategory({ route, navigation }) {
   const [showEditModal, setShowEditModal] = useState(null);
   const [showAddCartModal, setShowAddCartModal] = useState(null);
-  const [shoppingLists, setShoppingLists] = useState(null);
   const { getUserId } = useContext(AuthContext);
+  const { shoppingLists } = useContext(ShoppingListContext);
   const { categoryId } = route.params;
   const {
     apiData,
@@ -44,15 +43,6 @@ export default function SearchProductByCategory({ route, navigation }) {
     getApiData();
   }, []);
 
-  useEffect(() => {
-    getList();
-  }, [showAddCartModal]);
-
-  function getList() {
-    api.get<ShoppingList[]>(`/shopping/user/${getUserId()}`)
-      .then(({ data }) => setShoppingLists(data))
-      .catch(err => console.log(err));
-  }
 
   function renderHeaderList() {
     if (!apiData || !apiData.content.length) return null;

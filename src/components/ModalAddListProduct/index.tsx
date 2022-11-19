@@ -12,6 +12,7 @@ import AuthContext from "../../context/AuthContext";
 import Counter from "../Counter";
 import ShoppingList from "src/screens/ShoppingList";
 import { Alert } from "react-native";
+import ToastSuccess from "../ToastSuccess";
 
 
 type Props = {
@@ -37,7 +38,6 @@ export default function ModalAddListProduct({
     setQuantity('0');
     setErrorMsg('');
     setSelectedList(null);
-    console.log('reset');
   }, [showModal]);
 
   function handleAdd() {
@@ -71,7 +71,7 @@ export default function ModalAddListProduct({
     })
       .then(() => {
         toast.show({
-          description: "Adicionado com sucesso!",
+          render: () => <ToastSuccess message="Produto adicionado com sucesso!" /> 
         });
         setShow(null);
       })

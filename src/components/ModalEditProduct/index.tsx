@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Alert, FlatList } from "react-native";
-import { Pressable, Modal, Toast } from "native-base";
-
-import { Pagination } from "src/model/pagination";
+import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
+import { Modal, Toast } from "native-base";
 
 import api from "../../api";
 
 import Text from "../Text";
 import Button from "../Button";
 import Input from "../Input";
-import { Product, ProductDTO } from "src/model/product";
+import { ProductDTO } from "src/model/product";
+import ToastSuccess from "../ToastSuccess";
 
 
 type Props = {
@@ -41,22 +40,6 @@ export default function ModalEditProduct({
       market
     } = showEditModal;
 
-    // console.log({
-    //   id,
-    //   name,
-    //   price,
-    //   unity,
-    //   brand: {
-    //     id: brand.id
-    //   },
-    //   category: {
-    //     id: category.id
-    //   },
-    //   markets: [{
-    //     id: market.id
-    //   }]
-    // });
-
     api.put("register/product", {
       id,
       name,
@@ -73,7 +56,7 @@ export default function ModalEditProduct({
       }]
     }).then(() => {
       Toast.show({
-        description: "Preço editado com sucesso!",
+        render: () => <ToastSuccess message="Preço editado com sucesso!" /> 
       });
     })
     .catch((err) => {
