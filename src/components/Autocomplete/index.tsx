@@ -28,9 +28,10 @@ export default function Autocomplete<T>(props: Props) {
     const timerId = useRef<NodeJS.Timeout>();
 
 
-    function handleSearch() {
+    function handleSearch(name) {
         setLoading(true);
-        api.get(`/search/brand/name?name=${text}`)
+        console.log(`/search/brand/name?name=${name}`);
+        api.get(`/search/brand/name?name=${name}`)
             .then(({ data }) => {
                 console.log(data);
                 setData(data);
@@ -40,14 +41,14 @@ export default function Autocomplete<T>(props: Props) {
 
     }
 
-    function handleSetText(text: string) {
-        setText(text);
+    function handleSetText(name: string) {
+        setText(name);
         if (timerId.current) {
             clearTimeout(timerId.current);
         }
 
         timerId.current = setTimeout(() => {
-            handleSearch();
+            handleSearch(name);
         }, 2 * SEGUNDO);
     }
 
