@@ -9,7 +9,6 @@ type UseApiProps = {
 const DEFAULT_VALUE = {
   content: [],
   empty: false,
-  first: true,
   last: false,
   numberOfElements: 0,
   totalElements: 0,
@@ -25,7 +24,6 @@ export default function useApi<T>({ url }: UseApiProps) {
 
 
   function getApiData(pageNumber = 0, params = '', reset = false) {
-    console.log('getApiData')
     setLoading(true);
     api.get<Pagination<T>>(`${url}?page=${pageNumber}&${params}`)
       .then(({ data }) => {

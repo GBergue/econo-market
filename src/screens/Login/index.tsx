@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { VStack, Center, KeyboardAvoidingView, ScrollView } from 'native-base';
+import { Center, KeyboardAvoidingView, ScrollView } from 'native-base';
 import { Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useForm, Controller  } from 'react-hook-form';
 
 import api, { setToken } from '../../api';
+import { saveInStorageRefreshToken } from '../../api/auth';
 
 import { theme } from '../../theme/theme';
 
@@ -16,12 +17,12 @@ import Heading from "../../components/Heading";
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Text from '../../components/Text';
-import Loading from '../../components/Text';
 
 import LogoAzul from '@assets/logo_azul.svg';
 import AuthContext from '../../context/AuthContext';
 import jwtDecode from 'jwt-decode';
 import { TokenInfo } from 'src/model/token';
+
 
 type FormValues = {
   email: string;
@@ -69,7 +70,16 @@ export default function Login() {
       email: email.trim(),
       password: password.trim(),
     })
-      .then(({ data }) => {
+      .then(({ data, headers }) => {
+        const cookies = headers['set-cookie'];
+        if (cookies && Array.isArray(cookies)) {
+          const strRefreshToken = cookies[0].split(';').find((item) => item.startsWith('refreshToken'));
+          if (strRefreshToken) {
+            const refreshToken = strRefreshToken.split('=')[1];
+            saveInStorageRefreshToken(refreshToken);
+          }
+        }
+
         const { access_token } = data;
         const { user_id } = jwtDecode<TokenInfo>(access_token);
 

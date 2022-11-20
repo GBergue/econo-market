@@ -15,13 +15,13 @@ import Input from "../../components/Input";
 import ProductCard from "../../components/ProductCard";
 
 import { ProductDTO } from "src/model/product";
-import { ShoppingList as ShoppingListType } from "src/model/shopping";
 
 import useApi from "../../hooks/useApi";
 import ModalEditProduct from "../../components/ModalEditProduct";
 import ModalAddListProduct from "../../components/ModalAddListProduct";
 import AuthContext from "../../context/AuthContext";
-import api from "../../api";
+import ShoppingListContext from "../../context/ShoppingListContext";
+
 
 const SEGUNDO = 1000;
 
@@ -29,25 +29,19 @@ export default function ProductList({ navigation }) {
   const [search, setSearch] = useState('');
   const [showEditModal, setShowEditModal] = useState(null);
   const [showAddCartModal, setShowAddCartModal] = useState(null);
-  const [shoppingLists, setShoppingLists] = useState(null);
-  const { getUserId } = useContext(AuthContext);
   const idTimeout = useRef<NodeJS.Timeout | number>();
+  const { shoppingLists } = useContext(ShoppingListContext);
+  const { getUserId } = useContext(AuthContext);
   const {
     apiData,
-    getApiData,
-    isLoading,
     loadMore,
+    isLoading,
+    getApiData,
   } = useApi<ProductDTO>({ url: '/search/product/name' });
 
   useEffect(() => {
-    getList();
-  }, [showAddCartModal]);
-
-  function getList() {
-    api.get<ShoppingListType[]>(`/shopping/user/${getUserId()}`)
-      .then(({ data }) => setShoppingLists(data))
-      .catch(err => console.log(err));
-  }
+    handleSearch('');
+  }, []);
 
   function handleSearch(text: string) {
     getApiData(0, `name=${text}`, true);
@@ -61,9 +55,7 @@ export default function ProductList({ navigation }) {
     if (isLoading && apiData.content.length) {
       return (
         <Center>
-          <ActivityIndicator
-            size={"large"}
-          />
+          <ActivityIndicator size={"large"}/>
         </Center>
       );
     }
@@ -82,7 +74,9 @@ export default function ProductList({ navigation }) {
   }
 
   function renderHeaderList() {
-    if (isLoading || !apiData.totalElements) return null;
+    if (isLoading) return null;
+    if (!apiData.empty) return null;
+    if (!apiData.totalElements) return null;
 
     return (
       <Text fontSize="md" color="gray.400" mb={4}>

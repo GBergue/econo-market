@@ -12,35 +12,23 @@ import Heading from "../../components/Heading";
 import ModalAddList from "./components/ModalAddList";
 import { CardCart } from "./components/CardCart";
 
-import api from "../../api";
-
 import AuthContext from "../../context/AuthContext";
-import { ShoppingList as ShoppingListType } from "src/model/shopping";
+import ShoppingListContext from "../../context/ShoppingListContext";
 
 
 export default function ShoppingList() {
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [apiData, setData] = useState<ShoppingListType[]>();
   const { getUserId } = useContext(AuthContext);
+  const {
+    getList,
+    isLoading,
+    setLoading,
+    shoppingLists,
+  } = useContext(ShoppingListContext);
  
   useEffect(() => {
-    getList();
+    getList(getUserId());
   }, [showModal]);
-
-  function getList() {
-    setLoading(true);
-    api.get<ShoppingListType[]>(`/shopping/user/${getUserId()}`)
-      .then(({ data }) => {
-        console.log(data);
-        setData(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => setLoading(false));
-  }
-
 
   return (
     <VStack bg="gray.100" flex={1}>
@@ -52,10 +40,10 @@ export default function ShoppingList() {
 
         <FlatList
           refreshing={isLoading}
-          onRefresh={getList}
-          data={apiData}
+          onRefresh={() => getList(getUserId())}
+          data={shoppingLists}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <CardCart item={item} setLoading={setLoading} getList={getList}/>}
+          renderItem={({ item }) => <CardCart item={item} setLoading={setLoading} getList={() => getList(getUserId())}/>}
         />
 
         <ModalAddList

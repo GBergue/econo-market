@@ -1,6 +1,11 @@
 import React, { createContext, useState, ReactNode, useEffect} from 'react';
 import { Alert } from 'react-native';
-import api, { setToken, clearAuthorization } from '../api';
+import jwtDecode from 'jwt-decode';
+
+import { TokenInfo } from 'src/model/token';
+
+import { getRefreshToken } from '../api/auth';
+
 
 type AuthContext = {
   isAuthenticated: number,
@@ -19,23 +24,34 @@ const AuthContext = createContext<AuthContext>(null);
 function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isAuthenticated, setAuthenticated] = useState<number>(0);
 
+  async function refreshTheToken() {
+    const success = await getRefreshToken();
+    if (!success) {
+      Alert.alert('', 'Erro de conexão!');
+      setAuthenticated(0);
+    }
+  }
+
+  async function validateIfTokenValid() {
+    const access_token = await getRefreshToken();
+
+    if (access_token) {
+      const { user_id } = jwtDecode<TokenInfo>(access_token);
+      console.log('test', user_id);
+      setAuthenticated(user_id);
+    }
+  }
+
+  useEffect(() => {
+    validateIfTokenValid();
+  }, []);
+
+  
   useEffect(() => {
     let timerId;
     if (isAuthenticated > 0) {
       timerId = setInterval(() => {
-        api.get('/auth/token/refresh')
-          .then(({ data }) => {
-            const { access_token } = data;
-            if (access_token) {
-              setToken(access_token);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            Alert.alert('', 'Erro de conexão!');
-            setAuthenticated(0);
-            clearAuthorization();
-          });
+        refreshTheToken();
       }, 60 * SEGUNDO);
     }
 
