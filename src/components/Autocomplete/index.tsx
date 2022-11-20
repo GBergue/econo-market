@@ -30,13 +30,19 @@ export default function Autocomplete<T>(props: Props) {
 
     useEffect(() => {
         if (!showModal) {
+            setText(props.selectedValue);
+        }
+    }, [props.selectedValue]);
+
+    useEffect(() => {
+        if (!showModal) {
             if (!saved) {
                 setText('');
                 props.onChangeText('');
             }
         }
     }, [showModal]);
-    console.log(props.selectedValue);
+
 
 
     function handleSearch(name) {
