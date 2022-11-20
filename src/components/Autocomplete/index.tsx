@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Input as NBInput, IInputProps, Pressable, Modal } from 'native-base';
 
@@ -25,7 +25,18 @@ export default function Autocomplete<T>(props: Props) {
     const [data, setData] = useState<BrandDTO[]>();
     const [isLoading, setLoading] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [saved, setSaved] = useState(false);
     const timerId = useRef<NodeJS.Timeout>();
+
+    useEffect(() => {
+        if (!showModal) {
+            if (!saved) {
+                setText('');
+                props.onChangeText('');
+            }
+        }
+    }, [showModal]);
+    console.log(props.selectedValue);
 
 
     function handleSearch(name) {
@@ -42,7 +53,11 @@ export default function Autocomplete<T>(props: Props) {
     }
 
     function handleSetText(name: string) {
+        if (saved) {
+            setSaved(false);
+        }
         setText(name);
+        props.onChangeText(text);
         if (timerId.current) {
             clearTimeout(timerId.current);
         }
@@ -53,12 +68,16 @@ export default function Autocomplete<T>(props: Props) {
     }
 
     function handleSelectValue(item) {
+        if (saved) {
+            setSaved(false);
+        }
         props.onChangeText(item.id);
         setSelected(item);
         setText(item.brandName);
     }
 
     function handleSave() {
+        setSaved(true);
         let callOnChange = false;
         if (selected) {
             if (selected.brandName === text) {
@@ -73,7 +92,7 @@ export default function Autocomplete<T>(props: Props) {
         setShowModal(false);
     }
 
-    function renderInput() {
+    function renderInput(hasOnChange: boolean) {
         return (
             <NBInput
                 selectionColor="primary.300"
@@ -93,14 +112,14 @@ export default function Autocomplete<T>(props: Props) {
                 }}
                 {...props}
                 value={text}
-                onChangeText={handleSetText}
+                onChangeText={hasOnChange ? handleSetText : () => setShowModal(true)}
             />
         );
     }
 
     return (
         <>
-            { renderInput() }
+            { renderInput(false) }
 
             <Modal
                 isOpen={showModal}
@@ -121,7 +140,7 @@ export default function Autocomplete<T>(props: Props) {
                     </Modal.Header>
                     
                     <Modal.Body>
-                        { renderInput() }
+                        { renderInput(true) }
 
                         <FlatList
                             style={{ backgroundColor: 'white' }}
