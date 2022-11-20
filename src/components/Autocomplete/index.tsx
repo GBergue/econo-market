@@ -29,7 +29,7 @@ export default function Autocomplete<T>(props: Props) {
 
     function handleSearch() {
         setLoading(true);
-        api.get(`/search/brand?name=${text}`)
+        api.get(`/search/brand/name?name=${text}`)
             .then(({ data }) => {
                 console.log(data);
                 setData(data);
