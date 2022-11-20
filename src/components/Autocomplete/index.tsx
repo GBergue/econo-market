@@ -8,6 +8,7 @@ import api from '../../api';
 
 import Text from '../Text';
 import Button from '../Button';
+import { BrandDTO } from 'src/model/brand';
 
 
 const SEGUNDO = 1000;
@@ -21,7 +22,7 @@ type Props = IInputProps & {
 export default function Autocomplete<T>(props: Props) {
     const [text, setText] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState<Pagination<T>>();
+    const [data, setData] = useState<BrandDTO[]>();
     const [isLoading, setLoading] = useState(false);
     const [selected, setSelected] = useState(null);
     const timerId = useRef<NodeJS.Timeout>();
@@ -123,7 +124,7 @@ export default function Autocomplete<T>(props: Props) {
 
                         <FlatList
                             style={{ backgroundColor: 'white' }}
-                            data={data ? data.content : null}
+                            data={data}
                             renderItem={({ item }) => (
                                 <Pressable py={1} onPress={() => handleSelectValue(item)}>
                                     <Text marginLeft={2} color={item.id === selected?.id ? "primary.400" : "gray.700"}>
