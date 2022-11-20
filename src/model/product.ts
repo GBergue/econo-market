@@ -19,7 +19,7 @@ export type ProductDTO = {
   price: number;
   brand: BrandDTO;
   category: CategoryDTO;
-  market: MarketDTO;
+  markets: MarketDTO[];
   date: string,
   unity: string,
 }

@@ -17,6 +17,7 @@ export default function ProductCard({ item, navigation, setShowEditModal, setSho
   function handleAddCart() {
     setShowAddCartModal(item);
   }
+  
 
   function handleEdit() {
     setShowEditModal(item);
@@ -24,6 +25,7 @@ export default function ProductCard({ item, navigation, setShowEditModal, setSho
 
   const showBrand = !!item.brand?.brandName;
   const showCategory = !!item.category?.name;
+  const showMarket = !!item.markets[0]?.name;
 
   return (
     <Card bg="white" rounded="md" mb={2}>
@@ -95,13 +97,15 @@ export default function ProductCard({ item, navigation, setShowEditModal, setSho
                 justifyContent="space-between"
             >
                 
-                <Text
-                fontFamily="body"
-                fontSize="sm"
-                color="gray.400"
-                >
-                    {item.market.name}
-                </Text>
+                {showMarket && (
+                    <Text
+                        fontFamily="body"
+                        fontSize="sm"
+                        color="gray.400"
+                    >
+                        {item.markets[0].name}
+                    </Text>
+                )}
 
                 <HStack alignItems="center" >
                     <Text  fontSize="md" color="gray.400">
