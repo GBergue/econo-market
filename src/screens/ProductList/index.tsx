@@ -37,6 +37,7 @@ export default function ProductList({ navigation }) {
     loadMore,
     isLoading,
     getApiData,
+    setApiData,
   } = useApi<ProductDTO>({ url: '/search/product/name' });
 
   useEffect(() => {
@@ -109,6 +110,7 @@ export default function ProductList({ navigation }) {
       <ModalEditProduct
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
+        setApiData={setApiData}
       />
 
       <ModalAddListProduct

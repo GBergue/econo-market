@@ -9,27 +9,48 @@ import Button from "../Button";
 import Input from "../Input";
 import { ProductDTO } from "src/model/product";
 import ToastSuccess from "../ToastSuccess";
+import { Pagination } from "src/model/pagination";
 
 
 type Props = {
   showEditModal: ProductDTO;
   setShowEditModal: (product: ProductDTO) => void;
+  setApiData: (data: React.Dispatch<React.SetStateAction<Pagination<ProductDTO>>>) => void;
 };
 
 export default function ModalEditProduct({
   showEditModal,
   setShowEditModal,
+  setApiData,
 }: Props) {
   const [price, setPrice] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
 
   useEffect(() => {
     if (showEditModal) {
       setPrice(String(showEditModal.price));
+    } else {
+      setErrorMsg('');
     }
   }, [showEditModal]);
+
+  function updateListBeforeEdit(id: number, price: number) {
+    setApiData(prevList => {
+      const newListContent = prevList.content.map(prod => {
+        if (prod.id === id) {
+          prod.price = price;
+        }
+        return prod;
+      });
+
+      return {
+        ...prevList,
+        content: newListContent,
+      };
+    })
+  }
   
-  const [errorMsg, setErrorMsg] = useState('');
   
   function handleEdit() {
     const {
@@ -38,42 +59,15 @@ export default function ModalEditProduct({
       unity,
       brand,
       category,
-      market
+      markets,
     } = showEditModal;
 
-    // console.log({
-    //   id,
-    //   name,
-    //   price,
-    //   unity,
-    //   brand: {
-    //     id: brand.id
-    //   },
-    //   category: {
-    //     id: category.id
-    //   },
-    //   markets: [{
-    //     id: market.id
-    //   }]
-    // });
-    // if(!validate(price)){
-    //   Toast.show({
-    //     description: "Apenas números e ponto final"
-    //   });
-    //   return;
-    // }
     if(Number(price) === showEditModal.price){
-      // Toast.show({
-      //   description: "Apenas números e ponto final!"
-      // });
       setErrorMsg('Informe um preço diferente!');
       return;
     }
 
     if(!price.match("^[0-9.]+$")){
-      // Toast.show({
-      //   description: "Apenas números e ponto final!"
-      // });
       setErrorMsg('Apenas números e ponto final!');
       return;
     }
@@ -89,10 +83,9 @@ export default function ModalEditProduct({
       category: {
         id: category.id
       },
-      markets: [{
-        id: market.id
-      }]
+      markets,
     }).then(() => {
+      updateListBeforeEdit(id, price);
       Toast.show({
         render: () => <ToastSuccess message="Preço editado com sucesso!" /> 
       });
@@ -107,11 +100,6 @@ export default function ModalEditProduct({
   function handleChange(text) {
     setPrice(text);
   };
-
-  function validate(value: string) {
-    const matches = value.match("^[0-9.]+$");
-    return matches?.length > 0 || "Apenas números e ponto final";
-  }
 
 
   return (

@@ -34,6 +34,7 @@ export default function SearchProductByCategory({ route, navigation }) {
   const { categoryId } = route.params;
   const {
     apiData,
+    setApiData,
     getApiData,
     isLoading,
     loadMore,
@@ -102,6 +103,7 @@ export default function SearchProductByCategory({ route, navigation }) {
       <ModalEditProduct
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
+        setApiData={setApiData}
       />
 
       <ModalAddListProduct

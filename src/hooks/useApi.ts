@@ -8,6 +8,7 @@ type UseApiProps = {
 
 const DEFAULT_VALUE = {
   content: [],
+  first: false,
   empty: false,
   last: false,
   numberOfElements: 0,
@@ -47,6 +48,7 @@ export default function useApi<T>({ url }: UseApiProps) {
 
   return {
     apiData,
+    setApiData,
     isLoading,
     getApiData,
     loadMore,
