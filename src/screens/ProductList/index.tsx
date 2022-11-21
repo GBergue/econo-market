@@ -13,6 +13,7 @@ import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import ProductCard from "../../components/ProductCard";
+import Loading from "../../components/Loading";
 
 import { ProductDTO } from "src/model/product";
 
@@ -21,6 +22,7 @@ import ModalEditProduct from "../../components/ModalEditProduct";
 import ModalAddListProduct from "../../components/ModalAddListProduct";
 import AuthContext from "../../context/AuthContext";
 import ShoppingListContext from "../../context/ShoppingListContext";
+import LocationContext from "../../context/LocationContext";
 
 
 const SEGUNDO = 1000;
@@ -32,6 +34,7 @@ export default function ProductList({ navigation }) {
   const idTimeout = useRef<NodeJS.Timeout | number>();
   const { shoppingLists } = useContext(ShoppingListContext);
   const { getUserId } = useContext(AuthContext);
+  const { location } = useContext(LocationContext);
   const {
     apiData,
     loadMore,
@@ -131,7 +134,7 @@ export default function ProductList({ navigation }) {
           onChangeText={onChange}
           InputLeftElement={
             <Icon
-            name="ios-search"
+              name="ios-search"
               ml="2"
               size="4"
               color="primary.400"
@@ -139,6 +142,7 @@ export default function ProductList({ navigation }) {
             />
           }
         />
+        {isLoading && <Loading/>}
 
         <FlatList
           data={apiData.content}
@@ -155,6 +159,7 @@ export default function ProductList({ navigation }) {
               navigation={navigation}
               setShowEditModal={setShowEditModal}
               setShowAddCartModal={setShowAddCartModal}
+              location={location}
             />
           )}
         />

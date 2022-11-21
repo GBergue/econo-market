@@ -37,7 +37,6 @@ function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     if (access_token) {
       const { user_id } = jwtDecode<TokenInfo>(access_token);
-      console.log('test', user_id);
       setAuthenticated(user_id);
     }
   }

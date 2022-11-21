@@ -11,8 +11,10 @@ import Routes from './src/routes';
 import { theme } from './src/theme/theme';
 
 import Loading from './src/components/Loading';
+
 import { AuthContextProvider } from './src/context/AuthContext';
 import { ShoppingListProvider } from './src/context/ShoppingListContext';
+import { LocationContextProvider } from './src/context/LocationContext';
 
 
 export default function App() {
@@ -24,9 +26,11 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <AuthContextProvider>
-        <ShoppingListProvider>
-          {fontsLoaded ? <Routes /> : <Loading />}
-        </ShoppingListProvider>
+        <LocationContextProvider>
+          <ShoppingListProvider>
+            {fontsLoaded ? <Routes /> : <Loading />}
+          </ShoppingListProvider>
+        </LocationContextProvider>
       </AuthContextProvider>
     </NativeBaseProvider>
   );

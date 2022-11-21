@@ -2,10 +2,10 @@ export type MarketDTO = {
   id: number,
   name: string,
   uuid: string,
-  // "description": null,
-  //   "logo": null,
-  //   "locatex": null,
-  //   "locatey": null,
-  //   "address": null,
-  //   "schedules": null
+  address: Address,
+}
+
+type Address = {
+  locateX: number,
+  locateY: number,
 }

@@ -11,7 +11,7 @@ import Button from "../../components/Button";
 import Text from "../../components/Text";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
-import Select from "../../components/Select";
+import Loading from "../../components/Loading";
 
 import api from "../../api";
 import * as Location from 'expo-location';
@@ -19,10 +19,15 @@ import * as Location from 'expo-location';
 
 export default function RegisterLocation() {
   const { navigate } = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (location) {
+      console.log(location);
+    }
+  }, [location]);
 
   useEffect(() => {
     (async () => {
@@ -39,45 +44,15 @@ export default function RegisterLocation() {
     })();
   }, []);
 
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-
-  function handleSearch() {
-      setIsLoading(true);
-      
-      setIsLoading(false);
-  }
-
-
   return (
     <VStack bg="gray.100" flex={1}>
       <Header/>
 
-      <ScrollView paddingX={8}>
-        <Heading marginY={4}>Informe sua localização</Heading>
-      
-        <Input
-          placeholder="Digite o endereço"
-          marginBottom={2}
-          onChangeText={setLocation}
-          value={location}
-        />
+      <VStack>
+        {isLoading && <Loading/>}
         
-        <Text color="black">{text}</Text>
-        
-        <Button
-          marginBottom={2}
-          endIcon={<Feather name="log-in" size={16} color="white" />}
-          onPress={handleSearch}
-          isLoading={isLoading}
-        >
-          Buscar
-        </Button>
-      </ScrollView>
+        {!!errorMsg && <Text color="error.500">{errorMsg}</Text>}
+        </VStack>
     </VStack>
   );
 }

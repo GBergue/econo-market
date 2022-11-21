@@ -18,6 +18,7 @@ import ModalEditProduct from "../../components/ModalEditProduct";
 
 import AuthContext from "../../context/AuthContext";
 import ShoppingListContext  from "../../context/ShoppingListContext";
+import LocationContext  from "../../context/LocationContext";
 
 import { ProductDTO } from "src/model/product";
 
@@ -30,6 +31,7 @@ export default function SearchProductByCategory({ route, navigation }) {
   const [showEditModal, setShowEditModal] = useState(null);
   const [showAddCartModal, setShowAddCartModal] = useState(null);
   const { getUserId } = useContext(AuthContext);
+  const { location } = useContext(LocationContext);
   const { shoppingLists } = useContext(ShoppingListContext);
   const { categoryId } = route.params;
   const {
@@ -132,6 +134,7 @@ export default function SearchProductByCategory({ route, navigation }) {
               setShowEditModal={setShowEditModal}
               setShowAddCartModal={setShowAddCartModal}
               item={item}
+              location={location}
             />
           )}
         />

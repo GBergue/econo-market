@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useState, useContext } from "react";
 import {
   VStack,
   ScrollView,
@@ -6,28 +6,46 @@ import {
   Image,
 } from "native-base";
 import { Alert, View } from "react-native";
+import * as Location from 'expo-location';
+import { useNavigation } from "@react-navigation/native";
 
 import Text from "../../components/Text";
 import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Heading from "../../components/Heading";
+import { LoadingComponent } from "./components/LoadingCategory";
 
 import { CategoryDTO } from "../../model/category";
 import { getImageSource } from "../../helper/category";
 
-import api from "../../api";
-import { LoadingComponent } from "./components/LoadingCategory";
-import { useNavigation } from "@react-navigation/native";
+import api, { clearAuthorization } from "../../api";
+import AuthContext from "../../context/AuthContext";
+import LocationContext from "../../context/LocationContext";
 
 
 export default function CategoryList() {
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const { setAuthenticated } = useContext(AuthContext);
+  const { setLocation } = useContext(LocationContext);
   const navigation = useNavigation();
 
 
   useEffect(() => {
-    
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+  
+      if (status !== 'granted') {
+        Alert.alert('', 'O aplicativo necessita ter acesso a sua localização!');
+        logout();
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+
+      setLocation(location);
+    })();
+
     setLoading(true);
     api.get<CategoryDTO[]>('/search/category')
       .then(({ data }) => {
@@ -39,10 +57,20 @@ export default function CategoryList() {
       })
       .finally(() => {
         setLoading(false);
-        //navigation.navigate('registerLocation');
       });
   }, []);
 
+
+  function logout() {
+    api.post('/auth/logout')
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setAuthenticated(0);
+        clearAuthorization();
+      });
+  }
   
   function handleLoadCategory(categoryId: number) {
     navigation.navigate('searchProductByCategory', { categoryId });
