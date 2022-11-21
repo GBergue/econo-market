@@ -159,8 +159,8 @@ export default function Login() {
               message: 'Tamanho máximo de 50 caracteres'
             },
             minLength: {
-              value: 6,
-              message: 'Tamanho mínimo de 6 caracteres'
+              value: 8,
+              message: 'Tamanho mínimo de 8 caracteres'
             },
             required: 'Senha é obrigátoria',
           }}

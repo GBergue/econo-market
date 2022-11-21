@@ -14,6 +14,7 @@ export function getImageSource(categoryName: string) {
   if (categoryName === 'Padaria')           return require('../../assets/padaria-sem-fundo.png');
   if (categoryName === 'Higiene e Beleza')  return require('../../assets/higiene-beleza-sem-fundo.png');
   if (categoryName === 'Pet-Shop')          return require('../../assets/petshop-sem-fundo.png');
-  // if(categoryName === 'Congelados')         return require ('../../assets/congelados.png');
+  if(categoryName === 'Congelados')         return require ('../../assets/congelados.png');
+  if(categoryName === 'Bazar')              return require('../../assets/bazar.png');
   return null;
 }

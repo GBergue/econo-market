@@ -313,10 +313,10 @@ export default function RegisterProduct() {
               }}
               mb={!!errors.markets ? 2 : 4}
             >
-              {markets.map(({ name, id }) => (
+              {markets.map(({ name, id, address }) => (
                 <NBSelect.Item
                   key={id}
-                  label={name}
+                  label={'-'+name+'   \n '+'('+address.street+')'}
                   value={String(id)}
                 ></NBSelect.Item>
               ))}

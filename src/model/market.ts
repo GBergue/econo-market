@@ -8,4 +8,5 @@ export type MarketDTO = {
 type Address = {
   locateX: number,
   locateY: number,
+  street: string
 }
