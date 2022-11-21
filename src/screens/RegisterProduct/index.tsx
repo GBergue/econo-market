@@ -54,6 +54,9 @@ export default function RegisterProduct() {
     });
     api.get<MarketDTO[]>(`/search/market/distance?distance=5&locateX=${location.coords.latitude}&locateY=${location.coords.longitude}`)
       .then(({ data }) => {
+        if (data.length === 0) {
+          Alert.alert('', 'Nenhum mercado próximo encontrado no raio de 5 quilômetros.');
+        }
         setMarkets(data);
     });
     api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
