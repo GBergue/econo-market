@@ -25,6 +25,7 @@ export default function ModalEditProduct({
 }: Props) {
   const [price, setPrice] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -35,11 +36,14 @@ export default function ModalEditProduct({
     }
   }, [showEditModal]);
 
-  function updateListBeforeEdit(id: number, price: number) {
+  function updateListBeforeEdit(id: number, price: string) {
     setApiData(prevList => {
       const newListContent = prevList.content.map(prod => {
         if (prod.id === id) {
-          prod.price = price;
+          const numPrice = Number(price);
+          if (numPrice) {
+            prod.price = numPrice;
+          }
         }
         return prod;
       });
@@ -72,6 +76,7 @@ export default function ModalEditProduct({
       return;
     }
 
+    setLoading(true);
     api.put("register/product", {
       id,
       name,
@@ -95,6 +100,7 @@ export default function ModalEditProduct({
       Alert.alert('', 'Não foi possível atualizar o preço, tente novamente!');
       console.log(err);
     })
+    .finally(() => setLoading(false));
   }
 
   function handleChange(text) {
@@ -132,7 +138,7 @@ export default function ModalEditProduct({
             {!!errorMsg && <Text mt={2} color="error.500">{errorMsg}</Text>}
         </Modal.Body>
         <Modal.Footer bg="white" borderColor="gray.200">
-          <Button onPress={handleEdit} w="100%" mt={2}>
+          <Button onPress={handleEdit} w="100%" mt={2} isLoading={isLoading}>
             Editar
           </Button>
         </Modal.Footer>

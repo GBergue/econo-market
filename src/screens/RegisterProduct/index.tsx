@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Alert } from "react-native";
-import { Select as NBSelect, useToast } from "native-base";
+import { Select as NBSelect, Toast } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { VStack, ScrollView } from "native-base";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigation } from "@react-navigation/native";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
@@ -13,16 +12,15 @@ import Header from "../../components/Header";
 import Heading from "../../components/Heading";
 import Select from "../../components/Select";
 import Autocomplete from "../../components/Autocomplete";
+import ToastSuccess from "../../components/ToastSuccess";
 
 import api from "../../api";
 
 import { CategoryDTO } from "src/model/category";
 import { MarketDTO } from "src/model/market";
-import { BrandDTO } from "src/model/brand";
 import { UnityDTO } from "src/model/unity";
 
 export default function RegisterProduct() {
-  const toast = useToast();
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
   const [markets, setMarkets] = useState<MarketDTO[]>([]);
   const [unities, setUnities] = useState<UnityDTO[]>([]);
@@ -115,8 +113,8 @@ export default function RegisterProduct() {
           })
           .then(() => {
             reset();
-            toast.show({
-              description: "Produto adicionado com sucesso!",
+            Toast.show({
+              render: () => <ToastSuccess message="Produto adicionado com sucesso!" />
             });
           })
           .catch((err) => {
@@ -133,7 +131,7 @@ export default function RegisterProduct() {
           console.log(err);
         })
         .finally(() => setIsLoading(false));
-    }else{
+    } else {
       api
       .post("register/product", {
         name,
@@ -151,8 +149,8 @@ export default function RegisterProduct() {
       })
       .then(() => {
         reset();
-        toast.show({
-          description: "Produto adicionado com sucesso!",
+        Toast.show({
+          render: () => <ToastSuccess message="Produto adicionado com sucesso!" />
         });
       })
       .catch((err) => {
