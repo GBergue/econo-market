@@ -42,6 +42,8 @@ export default function ModalEditProduct({
         if (prod.id === id) {
           const numPrice = Number(price);
           if (numPrice) {
+            const priceGreater = numPrice < prod.price;
+            prod.greaterThanLastPrice = priceGreater;
             prod.price = numPrice;
           }
         }

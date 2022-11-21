@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Alert } from "react-native";
 import { Select as NBSelect, Toast } from "native-base";
 import { Feather } from "@expo/vector-icons";
@@ -16,9 +16,14 @@ import ToastSuccess from "../../components/ToastSuccess";
 
 import api from "../../api";
 
+import LocationContext from "../../context/LocationContext";
+
+import { getDistanceFromLatLonInKm } from "../../helper/location";
+
 import { CategoryDTO } from "src/model/category";
 import { MarketDTO } from "src/model/market";
 import { UnityDTO } from "src/model/unity";
+
 
 export default function RegisterProduct() {
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
@@ -26,6 +31,7 @@ export default function RegisterProduct() {
   const [unities, setUnities] = useState<UnityDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModalBrands, setShowModalBrands] = useState(false);
+  const { location } = useContext(LocationContext);
   const {
     control,
     reset,
@@ -46,10 +52,9 @@ export default function RegisterProduct() {
     api.get<CategoryDTO[]>("/search/category").then(({ data }) => {
       setCategories(data);
     });
-    api.get<MarketDTO[]>("/search/market").then(({ data }) => {
-      const { content } = data;
-      // console.log(content);
-      setMarkets(content);
+    api.get<MarketDTO[]>(`/search/market/distance?distance=5&locateX=${location.coords.latitude}&locateY=${location.coords.longitude}`)
+      .then(({ data }) => {
+        setMarkets(data);
     });
     api.get<UnityDTO[]>("/fieldutils/unity").then(({ data }) => {
       setUnities(data);
@@ -313,13 +318,23 @@ export default function RegisterProduct() {
               }}
               mb={!!errors.markets ? 2 : 4}
             >
-              {markets.map(({ name, id, address }) => (
+              {markets.map(({ name, id, address }) => {
+                let distance = '';
+                if (location) {
+                  const numDistance = getDistanceFromLatLonInKm(location.coords.latitude, location.coords.longitude, address.locateX, address.locateY);
+                  distance = numDistance.toFixed(2).replace('.',',');
+                }
+                if (distance) {
+                  distance = distance + 'km';
+                }
+                
+                return (
                 <NBSelect.Item
                   key={id}
-                  label={'-'+name+'   \n '+'('+address.street+')'}
+                  label={name + '\n' + '(' + address.street + ') ' + distance}
                   value={String(id)}
                 ></NBSelect.Item>
-              ))}
+              )})}
             </Select>
           )}
         />

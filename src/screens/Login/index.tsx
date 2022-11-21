@@ -196,14 +196,14 @@ export default function Login() {
 
         {getErrorMsg('password')}
 
-        <Text
+        {/* <Text
           color="gray.400"
           marginBottom={8}
           textAlign="right"
           onPress={() => navigate("forgotPassword")}
         >
           Esqueceu a senha?
-        </Text>
+        </Text> */}
 
         <Button
           marginBottom={2}

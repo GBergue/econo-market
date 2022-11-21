@@ -34,7 +34,7 @@ export default function CategoryList() {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-  
+
       if (status !== 'granted') {
         Alert.alert('', 'O aplicativo necessita ter acesso a sua localização!');
         logout();
@@ -42,7 +42,11 @@ export default function CategoryList() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-
+      if (!location) {
+        Alert.alert('', 'O aplicativo necessita ter acesso a sua localização!');
+        logout();
+        return;
+      }
       setLocation(location);
     })();
 

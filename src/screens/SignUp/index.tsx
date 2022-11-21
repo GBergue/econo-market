@@ -183,8 +183,8 @@ export default function SignUp() {
               message: 'Tamanho máximo de 50 caracteres'
             },
             minLength: {
-              value: 3,
-              message: 'Tamanho mínimo de 3 caracteres'
+              value: 8,
+              message: 'Tamanho mínimo de 8 caracteres'
             },
             required: 'Senha é obrigátoria',
           }}
