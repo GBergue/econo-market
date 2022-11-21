@@ -15,7 +15,7 @@ import { Pagination } from "src/model/pagination";
 type Props = {
   showEditModal: ProductDTO;
   setShowEditModal: (product: ProductDTO) => void;
-  setApiData: (data: React.Dispatch<React.SetStateAction<Pagination<ProductDTO>>>) => void;
+  setApiData: React.Dispatch<React.SetStateAction<Pagination<ProductDTO>>>;
 };
 
 export default function ModalEditProduct({

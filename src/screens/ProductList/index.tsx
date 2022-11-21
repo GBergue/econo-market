@@ -142,7 +142,8 @@ export default function ProductList({ navigation }) {
             />
           }
         />
-        {isLoading && <Loading/>}
+
+        {isLoading && apiData.content.length === 0 && <Loading/>}
 
         <FlatList
           data={apiData.content}
