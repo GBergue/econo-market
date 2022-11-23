@@ -32,7 +32,7 @@ export default function SearchProductByCategory({ route, navigation }) {
   const [showAddCartModal, setShowAddCartModal] = useState(null);
   const { getUserId } = useContext(AuthContext);
   const { location } = useContext(LocationContext);
-  const { shoppingLists } = useContext(ShoppingListContext);
+  const { getList, shoppingLists } = useContext(ShoppingListContext);
   const { categoryId } = route.params;
   const {
     apiData,
@@ -113,6 +113,7 @@ export default function SearchProductByCategory({ route, navigation }) {
         setShow={setShowAddCartModal}
         shoppingLists={shoppingLists}
         userId={getUserId()}
+        getList={getList}
       />
       
       <VStack flex={1} paddingX={8} paddingTop={8}>

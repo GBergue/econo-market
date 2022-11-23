@@ -14,10 +14,12 @@ import { CardCart } from "./components/CardCart";
 
 import AuthContext from "../../context/AuthContext";
 import ShoppingListContext from "../../context/ShoppingListContext";
+import ModalEditList from "./components/ModalEditList";
 
 
 export default function ShoppingList() {
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(null);
   const { getUserId } = useContext(AuthContext);
   const {
     getList,
@@ -27,8 +29,12 @@ export default function ShoppingList() {
   } = useContext(ShoppingListContext);
  
   useEffect(() => {
-    getList(getUserId());
+    refreshList();
   }, [showModal]);
+
+  function refreshList() {
+    getList(getUserId());
+  }
 
   return (
     <VStack bg="gray.100" flex={1}>
@@ -43,13 +49,27 @@ export default function ShoppingList() {
           onRefresh={() => getList(getUserId())}
           data={shoppingLists}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <CardCart item={item} setLoading={setLoading} getList={() => getList(getUserId())}/>}
+          renderItem={({ item }) => (
+            <CardCart
+              item={item}
+              setLoading={setLoading}
+              getList={() => getList(getUserId())}
+              setShowEditModal={setShowEditModal}
+            />
+          )}
         />
 
         <ModalAddList
           userId={getUserId()}
           showModal={showModal}
           setShowModal={setShowModal}
+        />
+
+        <ModalEditList
+          showEditModal={showEditModal}
+          setShowEditModal={setShowEditModal}
+          refreshList={refreshList}
+          userId={getUserId()}
         />
 
         <Fab

@@ -32,7 +32,7 @@ export default function ProductList({ navigation }) {
   const [showEditModal, setShowEditModal] = useState(null);
   const [showAddCartModal, setShowAddCartModal] = useState(null);
   const idTimeout = useRef<NodeJS.Timeout | number>();
-  const { shoppingLists } = useContext(ShoppingListContext);
+  const { getList, shoppingLists } = useContext(ShoppingListContext);
   const { getUserId } = useContext(AuthContext);
   const { location } = useContext(LocationContext);
   const {
@@ -121,6 +121,7 @@ export default function ProductList({ navigation }) {
         setShow={setShowAddCartModal}
         shoppingLists={shoppingLists}
         userId={getUserId()}
+        getList={getList}
       />
 
       <VStack flex={1} paddingX={8}>

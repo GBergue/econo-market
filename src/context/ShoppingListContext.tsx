@@ -25,10 +25,8 @@ function ShoppingListProvider({ children }: ShoppingListProviderProps) {
 
   function getList(userId: number) {
     setLoading(true);
-    console.log(userId);
     api.get<ShoppingList[]>(`/shopping/user/${userId}`)
       .then(({ data }) => {
-        console.log(data);
         setShoppingLists(data);
       })
       .catch(err => console.log(err))

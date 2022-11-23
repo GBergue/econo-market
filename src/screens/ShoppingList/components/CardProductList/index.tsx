@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { Alert } from "react-native";
-import { Pressable, HStack } from "native-base";
-import { Feather, AntDesign } from '@expo/vector-icons';
+import React from "react";
+import { HStack } from "native-base";
 
 import { InListProduct } from "src/model/shopping";
 
@@ -14,19 +12,15 @@ type Props = {
 
 export function CardProduct({ item }: Props) {
 
-  function handleDelete() {
-
-  }
-
   return (
     <HStack rounded="md" bg="white" w="100%" py={1} justifyContent="space-between">
-      <Text color="gray.500">
+      <Text color="gray.500" numberOfLines={1} flex={1}>
         {item.product.name}
       </Text>
-      <Text color="gray.500" textAlign="right">{' '}{item.quantity}x</Text>
-      {/* <Pressable onPress={handleDelete}>
-        <Feather name="trash" size={18} color="red" />
-      </Pressable> */}
+      <HStack>
+        <Text color="gray.500" textAlign="right">{' '}{item.quantity}x =</Text>
+        <Text bold color="gray.500" textAlign="right">{' R$'}{item.priceXQuantity.toFixed(2).replace('.',',')}</Text>
+      </HStack>
     </HStack>
   );
 };

@@ -47,10 +47,8 @@ export default function Autocomplete<T>(props: Props) {
 
     function handleSearch(name) {
         setLoading(true);
-        console.log(`/search/brand/name?name=${name}`);
         api.get(`/search/brand/name?name=${name}`)
             .then(({ data }) => {
-                console.log(data);
                 setData(data);
             })
             .catch(err => console.log(err))

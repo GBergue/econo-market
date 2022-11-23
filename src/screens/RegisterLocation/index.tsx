@@ -23,11 +23,6 @@ export default function RegisterLocation() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  useEffect(() => {
-    if (location) {
-      console.log(location);
-    }
-  }, [location]);
 
   useEffect(() => {
     (async () => {
