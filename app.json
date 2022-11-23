@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-mobile.png",
       "resizeMode": "contain",
-      "backgroundColor": "#197aa6"
+      "backgroundColor": "#FFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,8 +22,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#197aa6"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFF"
       },
       "package": "br.com.economarket"
     },
