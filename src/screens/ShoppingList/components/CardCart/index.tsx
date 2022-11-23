@@ -61,9 +61,11 @@ export function CardCart({ item, setLoading, getList, setShowEditModal }: Props)
         </VStack>
         
         <HStack>
-          <Pressable mr={4} onPress={handleEdit}>
-            <Feather name="edit" size={18} color="gray" />
-          </Pressable>
+          {!!qtdProdutos && (
+            <Pressable mr={4} onPress={handleEdit}>
+              <Feather name="edit" size={18} color="gray" />
+            </Pressable>
+          )}
           <Pressable onPress={handleDelete}>
             <Feather name="trash" size={18} color="red" />
           </Pressable>
