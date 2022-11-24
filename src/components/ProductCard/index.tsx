@@ -47,7 +47,7 @@ export default function ProductCard({ item, navigation, setShowEditModal, setSho
     return (
         <Icon
             as={AntDesign}
-            name={item.greaterThanLastPrice ? "caretup" : "caretdown"}
+            name={item.greaterThanLastPrice ? "caretdown" : "caretup"}
             color={getColor()}
             size="xs"
         />

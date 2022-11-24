@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFF"
       },
-      "package": "br.com.economarket"
+      "package": "br.com.economarket",
+      "permissions": ["ACCESS_COARSE_LOCATION","ACCESS_FINE_LOCATION","FOREGROUND_SERVICE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
