@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Pressable, Modal, Select as NBSelect, Stack, useToast } from "native-base";
+import React, { useState, useEffect } from "react";
+import { Modal, Select as NBSelect, Stack, useToast } from "native-base";
 
 import api from "../../api";
 
@@ -8,9 +8,7 @@ import Button from "../Button";
 import Select from "../Select";
 import { ProductDTO } from "src/model/product";
 import { ShoppingList as ShoppingListType } from "src/model/shopping";
-import AuthContext from "../../context/AuthContext";
 import Counter from "../Counter";
-import ShoppingList from "src/screens/ShoppingList";
 import { Alert } from "react-native";
 import ToastSuccess from "../ToastSuccess";
 
@@ -38,7 +36,7 @@ export default function ModalAddListProduct({
 
   useEffect(() => {
     setQuantity('0');
-    setErrorMsg('');
+    setErrorMsg(shoppingLists.length === 0 ? 'Necessário ter uma lista cadastrada!': '');
     setSelectedList(null);
   }, [showModal]);
 

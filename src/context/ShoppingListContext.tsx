@@ -1,7 +1,7 @@
-import React, { createContext, useState, ReactNode, useEffect} from 'react';
-import { Alert } from 'react-native';
+import React, { createContext, useState, ReactNode, useEffect, useContext} from 'react';
 import { ShoppingList } from 'src/model/shopping';
 import api from '../api';
+import AuthContext from './AuthContext';
 
 
 type ShoppingListContextProps = {
@@ -21,6 +21,14 @@ const ShoppingListContext = createContext<ShoppingListContextProps>(null);
 function ShoppingListProvider({ children }: ShoppingListProviderProps) {
   const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const { isAuthenticated, getUserId } = useContext(AuthContext);
+
+  useEffect(() => {
+    const userId = getUserId();
+    if (userId > 0) {
+      getList(userId);
+    }
+  }, [isAuthenticated])
 
 
   function getList(userId: number) {
