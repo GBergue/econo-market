@@ -168,7 +168,7 @@ export default function Login() {
             <Input 
               placeholder='Senha'
               secureTextEntry={!showPassword}
-              marginBottom={2}
+              marginBottom={8}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}

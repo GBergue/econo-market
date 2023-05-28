@@ -1,8 +1,10 @@
 import axios from 'axios'
+import { SERVER_URL } from 'server-info';
 
 
 const api = axios.create({
-  baseURL: 'https://api-economarket.herokuapp.com',
+  baseURL: SERVER_URL,
+  timeout: 30000, // 30s
 });
 
 export function setToken(access_token: string) {

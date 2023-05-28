@@ -33,7 +33,7 @@ export default function ShoppingList() {
   }, [showModal]);
 
   function refreshList() {
-    getList(getUserId());
+    getList();
   }
 
   return (
@@ -46,14 +46,14 @@ export default function ShoppingList() {
 
         <FlatList
           refreshing={isLoading}
-          onRefresh={() => getList(getUserId())}
+          onRefresh={() => getList()}
           data={shoppingLists}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <CardCart
               item={item}
               setLoading={setLoading}
-              getList={() => getList(getUserId())}
+              getList={getList}
               setShowEditModal={setShowEditModal}
             />
           )}

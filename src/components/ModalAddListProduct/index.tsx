@@ -17,7 +17,7 @@ type Props = {
   userId: number;
   showModal: ProductDTO;
   setShow: (product: ProductDTO) => void;
-  getList: (userId: number) => void;
+  getList: () => void;
   shoppingLists: ShoppingListType[];
 };
 
@@ -70,7 +70,7 @@ export default function ModalAddListProduct({
       }
     })
       .then(() => {
-        getList(userId);
+        getList();
         toast.show({
           render: () => <ToastSuccess message="Produto adicionado com sucesso!" /> 
         });

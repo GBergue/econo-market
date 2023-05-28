@@ -51,7 +51,7 @@ function AuthContextProvider({ children }: AuthContextProviderProps) {
     if (isAuthenticated > 0) {
       timerId = setInterval(() => {
         refreshTheToken();
-      }, 60 * SEGUNDO);
+      }, 60 * SEGUNDO * 30); // 30 min
     }
 
     return () => {

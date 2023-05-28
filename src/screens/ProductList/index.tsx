@@ -72,7 +72,7 @@ export default function ProductList({ navigation }) {
       }
       idTimeout.current = setTimeout(() => {
         handleSearch(text);
-      }, SEGUNDO * 1,5);
+      }, SEGUNDO * 1);
     }
     setSearch(text);
   }

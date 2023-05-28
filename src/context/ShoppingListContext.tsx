@@ -6,7 +6,7 @@ import AuthContext from './AuthContext';
 
 type ShoppingListContextProps = {
   shoppingLists: ShoppingList[],
-  getList: (id: number) => void,
+  getList: () => void,
   isLoading: boolean,
   setLoading: (bool: boolean) => void,
 }
@@ -24,16 +24,15 @@ function ShoppingListProvider({ children }: ShoppingListProviderProps) {
   const { isAuthenticated, getUserId } = useContext(AuthContext);
 
   useEffect(() => {
-    const userId = getUserId();
-    if (userId > 0) {
-      getList(userId);
+    if (isAuthenticated > 0) {
+      getList();
     }
   }, [isAuthenticated])
 
 
-  function getList(userId: number) {
+  function getList() {
     setLoading(true);
-    api.get<ShoppingList[]>(`/shopping/user/${userId}`)
+    api.get<ShoppingList[]>(`/shopping/user/${getUserId()}`)
       .then(({ data }) => {
         setShoppingLists(data);
       })

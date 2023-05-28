@@ -68,7 +68,7 @@ export default function Autocomplete<T>(props: Props) {
 
         timerId.current = setTimeout(() => {
             handleSearch(name);
-        }, 2 * SEGUNDO);
+        }, 1 * SEGUNDO);
     }
 
     function handleSelectValue(item) {
